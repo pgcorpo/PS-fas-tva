@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from typing import List
+import os
 
 
 class Settings(BaseSettings):
@@ -12,11 +13,21 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "info"
     RATE_LIMIT_ENABLED: bool = False
     MAX_REQUESTS_PER_MINUTE: int = 60
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000"]
+    CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+    ]
 
     class Config:
         env_file = ".env"
         case_sensitive = True
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Allow CORS_ORIGINS to be set via environment variable (comma-separated)
+        cors_env = os.getenv("CORS_ORIGINS")
+        if cors_env:
+            self.CORS_ORIGINS = [origin.strip() for origin in cors_env.split(",")]
 
 
 settings = Settings()
