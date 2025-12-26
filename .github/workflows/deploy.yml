@@ -1,0 +1,17 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Add deployment jobs here based on your hosting choice
+  # Example for Railway:
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: bervProject/railway-deploy@v1.0.0
+  #       with:
+  #         railway_token: ${{ secrets.RAILWAY_TOKEN }}
