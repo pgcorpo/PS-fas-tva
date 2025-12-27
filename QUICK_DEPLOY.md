@@ -123,4 +123,3 @@ Vercel will auto-deploy, or manually trigger from dashboard.
 2. Set up monitoring
 3. Configure custom domain (optional)
 4. Set up database backups
-

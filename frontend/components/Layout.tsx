@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 const navItems = [
   { href: "/daily", label: "Daily" },
@@ -12,6 +13,7 @@ const navItems = [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -42,6 +44,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   );
                 })}
               </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              {session?.user && (
+                <>
+                  <span className="text-sm text-gray-700">
+                    {session.user.email}
+                  </span>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="text-sm text-gray-700 hover:text-gray-900 font-medium"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

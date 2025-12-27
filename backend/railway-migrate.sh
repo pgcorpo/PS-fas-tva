@@ -9,4 +9,3 @@ cd /app || cd /backend || pwd
 alembic upgrade head
 
 echo "Migrations completed successfully!"
-

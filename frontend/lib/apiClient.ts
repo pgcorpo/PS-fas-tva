@@ -49,20 +49,25 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 async function fetchWithAuth<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  token?: string
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  
-  // TODO: Add authentication token/session handling
+
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     ...options.headers,
   };
 
+  // Add Bearer token if provided
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const response = await fetch(url, {
     ...options,
     headers,
-    credentials: "include", // For cookie-based auth
+    credentials: "include",
   });
 
   return handleResponse<T>(response);
