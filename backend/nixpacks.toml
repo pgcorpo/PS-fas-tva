@@ -2,11 +2,11 @@
 # This helps Railway build the Python backend correctly
 
 [phases.setup]
-nixPkgs = ["python311", "postgresql"]
+nixPkgs = ["python311", "postgresql", "gcc", "openssl", "libffi"]
 
 [phases.install]
 cmds = [
-  "pip install --upgrade pip",
+  "pip install --upgrade pip setuptools wheel",
   "pip install -r requirements.txt"
 ]
 
