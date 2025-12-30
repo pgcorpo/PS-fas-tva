@@ -95,6 +95,7 @@ export const api = {
         title: string;
         year: number;
         description: string | null;
+        is_deleted: boolean;
         created_at: string;
         updated_at: string;
       }>
