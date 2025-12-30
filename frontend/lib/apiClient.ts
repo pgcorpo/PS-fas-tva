@@ -73,23 +73,44 @@ async function fetchWithAuth<T>(
   return handleResponse<T>(response);
 }
 
+/**
+ * Get the JWT token from the token endpoint
+ */
+async function getToken(): Promise<string | null> {
+  try {
+    const response = await fetch("/api/token");
+    if (response.ok) {
+      const data = await response.json();
+      return data.token;
+    }
+    return null;
+  } catch (error) {
+    console.error("Failed to fetch token:", error);
+    return null;
+  }
+}
+
 // API Methods
 export const api = {
   // Health
   health: () => fetchWithAuth<{ status: string }>("/api/health"),
 
   // User
-  getMe: () => fetchWithAuth<{
-    id: string;
-    email: string;
-    google_user_id: string;
-    created_at: string;
-    updated_at: string;
-  }>("/api/me"),
+  getMe: async () => {
+    const token = await getToken();
+    return fetchWithAuth<{
+      id: string;
+      email: string;
+      google_user_id: string;
+      created_at: string;
+      updated_at: string;
+    }>("/api/me", {}, token ?? undefined);
+  },
 
   // Goals
-  getGoals: () =>
-    fetchWithAuth<
+  getGoals: async () => {
+    const token = await getToken();
+    return fetchWithAuth<
       Array<{
         id: string;
         title: string;
@@ -99,36 +120,59 @@ export const api = {
         created_at: string;
         updated_at: string;
       }>
-    >("/api/goals"),
+    >("/api/goals", {}, token ?? undefined);
+  },
 
-  createGoal: (data: {
+  createGoal: async (data: {
     title: string;
     year: number;
     description?: string | null;
-  }) =>
-    fetchWithAuth<{ id: string }>("/api/goals", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+  }) => {
+    const token = await getToken();
+    return fetchWithAuth<{ id: string }>(
+      "/api/goals",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token ?? undefined
+    );
+  },
 
-  updateGoal: (goalId: string, data: {
-    title: string;
-    year: number;
-    description?: string | null;
-  }) =>
-    fetchWithAuth<{ ok: boolean }>(`/api/goals/${goalId}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    }),
+  updateGoal: async (
+    goalId: string,
+    data: {
+      title: string;
+      year: number;
+      description?: string | null;
+    }
+  ) => {
+    const token = await getToken();
+    return fetchWithAuth<{ ok: boolean }>(
+      `/api/goals/${goalId}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      },
+      token ?? undefined
+    );
+  },
 
-  deleteGoal: (goalId: string) =>
-    fetchWithAuth<{ ok: boolean }>(`/api/goals/${goalId}`, {
-      method: "DELETE",
-    }),
+  deleteGoal: async (goalId: string) => {
+    const token = await getToken();
+    return fetchWithAuth<{ ok: boolean }>(
+      `/api/goals/${goalId}`,
+      {
+        method: "DELETE",
+      },
+      token ?? undefined
+    );
+  },
 
   // Habits
-  getHabits: () =>
-    fetchWithAuth<
+  getHabits: async () => {
+    const token = await getToken();
+    return fetchWithAuth<
       Array<{
         id: string;
         name: string;
@@ -147,9 +191,10 @@ export const api = {
           updated_at: string;
         }>;
       }>
-    >("/api/habits"),
+    >("/api/habits", {}, token ?? undefined);
+  },
 
-  createHabit: (data: {
+  createHabit: async (data: {
     name: string;
     weekly_target: number;
     requires_text_on_completion: boolean;
@@ -157,34 +202,56 @@ export const api = {
     order_index?: number;
     client_timezone?: string | null;
     client_tz_offset_minutes?: number | null;
-  }) =>
-    fetchWithAuth<{ id: string }>("/api/habits", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+  }) => {
+    const token = await getToken();
+    return fetchWithAuth<{ id: string }>(
+      "/api/habits",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token ?? undefined
+    );
+  },
 
-  updateHabit: (habitId: string, data: {
-    name: string;
-    weekly_target: number;
-    requires_text_on_completion: boolean;
-    linked_goal_id?: string | null;
-    order_index?: number;
-    client_timezone?: string | null;
-    client_tz_offset_minutes?: number | null;
-  }) =>
-    fetchWithAuth<{ ok: boolean }>(`/api/habits/${habitId}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    }),
+  updateHabit: async (
+    habitId: string,
+    data: {
+      name: string;
+      weekly_target: number;
+      requires_text_on_completion: boolean;
+      linked_goal_id?: string | null;
+      order_index?: number;
+      client_timezone?: string | null;
+      client_tz_offset_minutes?: number | null;
+    }
+  ) => {
+    const token = await getToken();
+    return fetchWithAuth<{ ok: boolean }>(
+      `/api/habits/${habitId}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      },
+      token ?? undefined
+    );
+  },
 
-  deleteHabit: (habitId: string) =>
-    fetchWithAuth<{ ok: boolean }>(`/api/habits/${habitId}`, {
-      method: "DELETE",
-    }),
+  deleteHabit: async (habitId: string) => {
+    const token = await getToken();
+    return fetchWithAuth<{ ok: boolean }>(
+      `/api/habits/${habitId}`,
+      {
+        method: "DELETE",
+      },
+      token ?? undefined
+    );
+  },
 
   // Completions
-  getCompletions: (start: string, end: string) =>
-    fetchWithAuth<
+  getCompletions: async (start: string, end: string) => {
+    const token = await getToken();
+    return fetchWithAuth<
       Array<{
         id: string;
         habit_id: string;
@@ -193,26 +260,34 @@ export const api = {
         created_at: string;
         updated_at: string;
       }>
-    >(`/api/completions?start=${start}&end=${end}`),
+    >(`/api/completions?start=${start}&end=${end}`, {}, token ?? undefined);
+  },
 
-  createCompletion: (data: {
+  createCompletion: async (data: {
     habit_id: string;
     date: string;
     text?: string | null;
     client_timezone?: string | null;
     client_tz_offset_minutes?: number | null;
-  }) =>
-    fetchWithAuth<{ id: string }>("/api/completions", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+  }) => {
+    const token = await getToken();
+    return fetchWithAuth<{ id: string }>(
+      "/api/completions",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      token ?? undefined
+    );
+  },
 
-  deleteCompletion: (
+  deleteCompletion: async (
     completionId: string,
     client_timezone?: string | null,
     client_tz_offset_minutes?: number | null
-  ) =>
-    fetchWithAuth<{ ok: boolean }>(
+  ) => {
+    const token = await getToken();
+    return fetchWithAuth<{ ok: boolean }>(
       `/api/completions/${completionId}?${new URLSearchParams({
         ...(client_timezone && { client_timezone }),
         ...(client_tz_offset_minutes !== undefined && {
@@ -221,6 +296,8 @@ export const api = {
       }).toString()}`,
       {
         method: "DELETE",
-      }
-    ),
+      },
+      token ?? undefined
+    );
+  },
 };

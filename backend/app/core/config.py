@@ -24,10 +24,16 @@ class Settings(BaseSettings):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Allow CORS_ORIGINS to be set via environment variable (comma-separated)
+        # Allow CORS_ORIGINS to be set via environment variable (JSON array or comma-separated)
         cors_env = os.getenv("CORS_ORIGINS")
         if cors_env:
-            self.CORS_ORIGINS = [origin.strip() for origin in cors_env.split(",")]
+            import json
+            try:
+                # Try parsing as JSON array first
+                self.CORS_ORIGINS = json.loads(cors_env)
+            except json.JSONDecodeError:
+                # Fall back to comma-separated string
+                self.CORS_ORIGINS = [origin.strip() for origin in cors_env.split(",")]
 
 
 settings = Settings()
