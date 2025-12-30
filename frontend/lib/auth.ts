@@ -16,8 +16,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, account, profile }) {
       // Add Google user ID to token on first sign in
       if (account && profile) {
-        token.sub = profile.sub;
-        token.email = profile.email;
+        token.sub = profile.sub ?? undefined;
+        token.email = profile.email ?? undefined;
       }
       return token;
     },
