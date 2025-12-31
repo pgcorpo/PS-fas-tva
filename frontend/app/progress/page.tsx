@@ -81,36 +81,46 @@ export default function ProgressPage() {
 
   return (
     <Layout>
-      <div className="px-4 py-6">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Progress</h2>
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        {/* Header */}
+        <div className="mb-12">
+          <h1 className="text-4xl font-semibold text-gray-900 mb-3">Your Progress</h1>
+          <p className="text-lg text-gray-600">Track your weekly habit completion</p>
         </div>
 
-        <div className="space-y-6">
+        {/* Week Cards */}
+        <div className="space-y-4">
           {weekProgress.map((week) => (
             <div
               key={week.weekStartStr}
-              className={`p-4 rounded-lg border-2 ${week.color || "bg-white border-gray-200"}`}
+              className={`p-6 rounded-2xl border transition-all duration-200 hover:shadow-md ${
+                week.color || "bg-white border-gray-200 shadow-sm"
+              }`}
             >
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-gray-900">
-                  {format(week.weekStart, "MMM d")} - {format(week.weekEnd, "MMM d")}
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {format(week.weekStart, "MMM d")} - {format(week.weekEnd, "MMM d, yyyy")}
                 </h3>
                 {week.required > 0 && (
-                  <span className="text-sm text-gray-600">
-                    {week.completed} / {week.required} ({Math.round(week.percentage)}%)
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-600">
+                      {week.completed} / {week.required}
+                    </span>
+                    <span className="px-3 py-1 text-sm font-semibold bg-gray-100 text-gray-700 rounded-full">
+                      {Math.round(week.percentage)}%
+                    </span>
+                  </div>
                 )}
               </div>
               {week.required > 0 && (
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                   <div
-                    className={`h-2 rounded-full ${
+                    className={`h-3 rounded-full transition-all duration-500 ${
                       week.percentage < 25
-                        ? "bg-red-500"
+                        ? "bg-gradient-to-r from-red-500 to-rose-500"
                         : week.percentage <= 75
-                        ? "bg-yellow-500"
-                        : "bg-green-500"
+                        ? "bg-gradient-to-r from-yellow-400 to-amber-500"
+                        : "bg-gradient-to-r from-green-500 to-emerald-500"
                     }`}
                     style={{ width: `${Math.min(100, week.percentage)}%` }}
                   />
