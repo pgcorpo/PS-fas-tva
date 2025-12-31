@@ -76,9 +76,14 @@ export default function GoalsPage() {
       handleCloseModal();
     } catch (error: any) {
       console.error("Failed to save goal:", error);
+      console.error("Error status:", error?.status);
+      console.error("Error message:", error?.message);
+
       // Show user-friendly error message
-      if (error.status === 401) {
+      if (error?.status === 401 || error?.message?.includes("401") || error?.message?.includes("Unauthorized")) {
         setError("session expired. please refresh the page and try again.");
+      } else if (error?.message) {
+        setError(`failed to save: ${error.message}`);
       } else {
         setError("failed to save. please try again.");
       }
@@ -115,7 +120,7 @@ export default function GoalsPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-semibold text-gray-900 mb-3">your goals</h1>
-          <p className="text-lg text-gray-700">the big goals you&apos;re chasing this year</p>
+          <p className="text-lg text-gray-900">the big goals you&apos;re chasing this year</p>
         </div>
 
         {/* Add Goal Button */}
@@ -145,7 +150,7 @@ export default function GoalsPage() {
                 </svg>
               </div>
               <h3 className="text-2xl font-semibold text-gray-900 mb-3">no goals yet</h3>
-              <p className="text-gray-700 mb-8">what&apos;s the first big thing you&apos;re going after?</p>
+              <p className="text-gray-900 mb-8">what&apos;s the first big thing you&apos;re going after?</p>
               <button
                 onClick={() => handleOpenModal()}
                 className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg"
@@ -170,7 +175,7 @@ export default function GoalsPage() {
                       </span>
                     </div>
                     {goal.description && (
-                      <p className="text-gray-700 leading-relaxed">{goal.description}</p>
+                      <p className="text-gray-900 leading-relaxed">{goal.description}</p>
                     )}
                   </div>
                   <div className="flex gap-3 ml-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -254,7 +259,7 @@ export default function GoalsPage() {
 
                     <div>
                       <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-2">
-                        details <span className="text-gray-600 font-normal">(if you want)</span>
+                        details <span className="text-gray-700 font-normal">(if you want)</span>
                       </label>
                       <textarea
                         id="description"

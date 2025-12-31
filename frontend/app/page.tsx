@@ -41,10 +41,10 @@ export default function Home() {
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
               fix your life, one habit at a time
             </h1>
-            <p className="text-xl text-gray-700 mb-4 leading-relaxed max-w-xl mx-auto">
+            <p className="text-xl text-gray-900 mb-4 leading-relaxed max-w-xl mx-auto">
               track what matters, link it to your big picture goals, actually do the thing
             </p>
-            <p className="text-lg text-gray-600 max-w-lg mx-auto">
+            <p className="text-lg text-gray-900 max-w-lg mx-auto">
               show up daily, stay motivated, become that person
             </p>
           </div>
@@ -58,7 +58,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">daily check-ins</h3>
-              <p className="text-sm text-gray-700">check off your daily wins, journal if you feel like it</p>
+              <p className="text-sm text-gray-900">check off your daily wins, journal if you feel like it</p>
             </div>
 
             <div className="text-center p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
@@ -68,7 +68,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">weekly targets</h3>
-              <p className="text-sm text-gray-700">set goals, watch yourself actually hit them</p>
+              <p className="text-sm text-gray-900">set goals, watch yourself actually hit them</p>
             </div>
 
             <div className="text-center p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
@@ -78,7 +78,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">your dashboard</h3>
-              <p className="text-sm text-gray-700">see how consistent you really are</p>
+              <p className="text-sm text-gray-900">see how consistent you really are</p>
             </div>
           </div>
 

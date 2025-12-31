@@ -147,7 +147,7 @@ export default function DailyPage() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">you&apos;re done!</h3>
-                <p className="text-gray-700">week = complete. go touch grass</p>
+                <p className="text-gray-900">week = complete. go touch grass</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -221,7 +221,7 @@ export default function DailyPage() {
                           {item.habit.name}
                         </label>
                         {completion.text && (
-                          <p className="text-sm text-gray-700 mt-1">
+                          <p className="text-sm text-gray-900 mt-1">
                             {completion.text.substring(0, 100)}
                             {completion.text.length > 100 ? "..." : ""}
                           </p>

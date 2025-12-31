@@ -76,9 +76,14 @@ export default function HabitsPage() {
       handleCloseModal();
     } catch (error: any) {
       console.error("Failed to save habit:", error);
+      console.error("Error status:", error?.status);
+      console.error("Error message:", error?.message);
+
       // Show user-friendly error message
-      if (error.status === 401) {
+      if (error?.status === 401 || error?.message?.includes("401") || error?.message?.includes("Unauthorized")) {
         setError("session expired. please refresh the page and try again.");
+      } else if (error?.message) {
+        setError(`failed to save: ${error.message}`);
       } else {
         setError("failed to save. please try again.");
       }
@@ -115,7 +120,7 @@ export default function HabitsPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-semibold text-gray-900 mb-3">your habits</h1>
-          <p className="text-lg text-gray-700">the habits that&apos;ll actually change your life</p>
+          <p className="text-lg text-gray-900">the habits that&apos;ll actually change your life</p>
         </div>
 
         {/* Add Habit Button */}
@@ -145,7 +150,7 @@ export default function HabitsPage() {
                 </svg>
               </div>
               <h3 className="text-2xl font-semibold text-gray-900 mb-3">no habits yet</h3>
-              <p className="text-gray-700 mb-8">add your first habit and start the grind</p>
+              <p className="text-gray-900 mb-8">add your first habit and start the grind</p>
               <button
                 onClick={() => handleOpenModal()}
                 className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg"
@@ -311,12 +316,12 @@ export default function HabitsPage() {
                         onChange={(e) => setFormData({ ...formData, weekly_target: parseInt(e.target.value) })}
                         className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
                       />
-                      <p className="mt-2 text-sm text-gray-600">realistic number, be honest with yourself (1-7)</p>
+                      <p className="mt-2 text-sm text-gray-900">realistic number, be honest with yourself (1-7)</p>
                     </div>
 
                     <div>
                       <label htmlFor="linked_goal" className="block text-sm font-semibold text-gray-900 mb-2">
-                        connects to which goal? <span className="text-gray-600 font-normal">(optional)</span>
+                        connects to which goal? <span className="text-gray-700 font-normal">(optional)</span>
                       </label>
                       <select
                         id="linked_goal"
@@ -341,7 +346,7 @@ export default function HabitsPage() {
                         onChange={(e) => setFormData({ ...formData, requires_text_on_completion: e.target.checked })}
                         className="mt-0.5 h-5 w-5 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
                       />
-                      <label htmlFor="requires_text" className="text-sm text-gray-700 leading-relaxed">
+                      <label htmlFor="requires_text" className="text-sm text-gray-900 leading-relaxed">
                         make me write notes when i do this
                       </label>
                     </div>
