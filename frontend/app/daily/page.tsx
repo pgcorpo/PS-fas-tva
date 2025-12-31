@@ -109,7 +109,7 @@ export default function DailyPage() {
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="text-center">
             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-            <p className="mt-6 text-gray-600 font-medium">Loading your day...</p>
+            <p className="mt-6 text-gray-600 font-medium">pulling up your day...</p>
           </div>
         </div>
       </Layout>
@@ -125,7 +125,7 @@ export default function DailyPage() {
             {formatDate(selectedDate, "EEEE, MMMM d")}
           </h1>
           {!isToday && (
-            <p className="text-base text-gray-500">Read-only view</p>
+            <p className="text-base text-gray-500">view only (can&apos;t edit)</p>
           )}
         </div>
 
@@ -135,7 +135,7 @@ export default function DailyPage() {
             <div className="flex items-center gap-2 mb-6">
               <div className="w-1.5 h-8 bg-gradient-to-b from-pink-500 to-rose-500 rounded-full"></div>
               <h2 className="text-2xl font-semibold text-gray-900">
-                To do today
+                on your plate today
               </h2>
             </div>
 
@@ -146,8 +146,8 @@ export default function DailyPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">All done!</h3>
-                <p className="text-gray-600">You've completed all habits for this week</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">you&apos;re done!</h3>
+                <p className="text-gray-600">week = complete. go touch grass</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -165,7 +165,7 @@ export default function DailyPage() {
                           onChange={() => {
                             if (item.version.requires_text_on_completion) {
                               // TODO: Open inline text editor
-                              alert("Text entry required - inline editor coming soon");
+                              alert("needs notes - editor dropping soon");
                             } else {
                               handleComplete(item.habit.id);
                             }
@@ -187,13 +187,13 @@ export default function DailyPage() {
           <div className="flex items-center gap-2 mb-6">
             <div className="w-1.5 h-8 bg-gradient-to-b from-green-500 to-emerald-500 rounded-full"></div>
             <h2 className="text-2xl font-semibold text-gray-900">
-              Completed
+              already done
             </h2>
           </div>
 
           {habitInstances.filter((item) => item.completedForDate.length > 0).length === 0 ? (
             <div className="text-center py-12 bg-gray-50 rounded-2xl border border-gray-200">
-              <p className="text-gray-500">No habits completed yet today</p>
+              <p className="text-gray-500">nothing done yet, time to start</p>
             </div>
           ) : (
             <div className="space-y-3">

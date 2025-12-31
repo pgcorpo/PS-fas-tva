@@ -19,7 +19,7 @@ export default function Home() {
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
         <div className="text-center">
           <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-          <p className="mt-6 text-lg text-gray-600 font-medium">Loading...</p>
+          <p className="mt-6 text-lg text-gray-600 font-medium">hold up...</p>
         </div>
       </div>
     );
@@ -39,13 +39,13 @@ export default function Home() {
 
             {/* Heading */}
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Build better habits
+              fix your life, one habit at a time
             </h1>
             <p className="text-xl text-gray-600 mb-4 leading-relaxed max-w-xl mx-auto">
-              Track your daily habits, link them to annual goals, and achieve your targets week by week.
+              track what matters, link it to your big picture goals, actually do the thing
             </p>
             <p className="text-lg text-gray-500 max-w-lg mx-auto">
-              Stay consistent, stay motivated, and watch yourself grow.
+              show up daily, stay motivated, become that person
             </p>
           </div>
 
@@ -57,8 +57,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Daily tracking</h3>
-              <p className="text-sm text-gray-600">Mark habits complete each day with optional notes</p>
+              <h3 className="font-semibold text-gray-900 mb-2">daily check-ins</h3>
+              <p className="text-sm text-gray-600">check off your daily wins, journal if you feel like it</p>
             </div>
 
             <div className="text-center p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
@@ -67,8 +67,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Weekly goals</h3>
-              <p className="text-sm text-gray-600">Set targets and track your progress</p>
+              <h3 className="font-semibold text-gray-900 mb-2">weekly targets</h3>
+              <p className="text-sm text-gray-600">set goals, watch yourself actually hit them</p>
             </div>
 
             <div className="text-center p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
@@ -77,8 +77,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Visual progress</h3>
-              <p className="text-sm text-gray-600">See your consistency over time</p>
+              <h3 className="font-semibold text-gray-900 mb-2">your dashboard</h3>
+              <p className="text-sm text-gray-600">see how consistent you really are</p>
             </div>
           </div>
 
@@ -94,10 +94,10 @@ export default function Home() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
               </svg>
-              Continue with Google
+              sign in with google
             </button>
             <p className="mt-6 text-sm text-gray-500">
-              Free forever · No credit card required
+              100% free · no catch
             </p>
           </div>
         </div>

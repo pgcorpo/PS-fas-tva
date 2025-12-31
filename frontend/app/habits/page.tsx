@@ -77,7 +77,7 @@ export default function HabitsPage() {
   };
 
   const handleDelete = async (habitId: string) => {
-    if (confirm("Delete this habit? Historical data will be preserved.")) {
+    if (confirm("delete this? (your old data stays)")) {
       try {
         await deleteHabit.mutateAsync(habitId);
       } catch (error) {
@@ -92,7 +92,7 @@ export default function HabitsPage() {
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="text-center">
             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-            <p className="mt-6 text-gray-600 font-medium">Loading your habits...</p>
+            <p className="mt-6 text-gray-600 font-medium">loading...</p>
           </div>
         </div>
       </Layout>
@@ -104,8 +104,8 @@ export default function HabitsPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-gray-900 mb-3">Your Habits</h1>
-          <p className="text-lg text-gray-600">Build consistent habits to achieve your goals</p>
+          <h1 className="text-4xl font-semibold text-gray-900 mb-3">your habits</h1>
+          <p className="text-lg text-gray-600">the habits that&apos;ll actually change your life</p>
         </div>
 
         {/* Add Habit Button */}
@@ -113,7 +113,7 @@ export default function HabitsPage() {
           onClick={() => handleOpenModal()}
           className="mb-10 px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
         >
-          + Add a new habit
+          + new habit
         </button>
 
         {activeHabits.length === 0 ? (
@@ -134,13 +134,13 @@ export default function HabitsPage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-3">No habits yet</h3>
-              <p className="text-gray-600 mb-8">Create your first habit and start tracking your progress</p>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-3">no habits yet</h3>
+              <p className="text-gray-600 mb-8">add your first habit and start the grind</p>
               <button
                 onClick={() => handleOpenModal()}
                 className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg"
               >
-                Create your first habit
+                add your first habit
               </button>
             </div>
           </div>
@@ -176,7 +176,7 @@ export default function HabitsPage() {
                           </svg>
                         </div>
                         <span className="text-gray-700">
-                          {latestVersion?.weekly_target || 0} times per week
+                          {latestVersion?.weekly_target || 0}× weekly
                         </span>
                       </div>
 
@@ -197,7 +197,7 @@ export default function HabitsPage() {
                               />
                             </svg>
                           </div>
-                          <span className="text-gray-700">Notes required</span>
+                          <span className="text-gray-700">needs notes</span>
                         </div>
                       )}
 
@@ -229,13 +229,13 @@ export default function HabitsPage() {
                       onClick={() => handleOpenModal(habit)}
                       className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-white rounded-xl transition-colors duration-200"
                     >
-                      Edit
+                      edit
                     </button>
                     <button
                       onClick={() => handleDelete(habit.id)}
                       className="flex-1 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-white rounded-xl transition-colors duration-200"
                     >
-                      Delete
+                      delete
                     </button>
                   </div>
                 </div>
@@ -258,7 +258,7 @@ export default function HabitsPage() {
               <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
                 <div className="flex items-center justify-between mb-8">
                   <h2 className="text-3xl font-semibold text-gray-900">
-                    {editingHabit ? "Edit habit" : "Create a habit"}
+                    {editingHabit ? "edit habit" : "new habit"}
                   </h2>
                   <button
                     onClick={handleCloseModal}
@@ -274,7 +274,7 @@ export default function HabitsPage() {
                   <div className="space-y-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-semibold text-gray-900 mb-2">
-                        Habit name
+                        what&apos;s the habit?
                       </label>
                       <input
                         type="text"
@@ -283,13 +283,13 @@ export default function HabitsPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
-                        placeholder="Morning run, Read for 30 min..."
+                        placeholder="run 3 miles, read before bed, drink more water..."
                       />
                     </div>
 
                     <div>
                       <label htmlFor="weekly_target" className="block text-sm font-semibold text-gray-900 mb-2">
-                        Weekly target
+                        how many times per week?
                       </label>
                       <input
                         type="number"
@@ -301,12 +301,12 @@ export default function HabitsPage() {
                         onChange={(e) => setFormData({ ...formData, weekly_target: parseInt(e.target.value) })}
                         className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
                       />
-                      <p className="mt-2 text-sm text-gray-500">How many times per week? (1-7)</p>
+                      <p className="mt-2 text-sm text-gray-500">realistic number, be honest with yourself (1-7)</p>
                     </div>
 
                     <div>
                       <label htmlFor="linked_goal" className="block text-sm font-semibold text-gray-900 mb-2">
-                        Linked goal <span className="text-gray-400 font-normal">(optional)</span>
+                        connects to which goal? <span className="text-gray-400 font-normal">(optional)</span>
                       </label>
                       <select
                         id="linked_goal"
@@ -314,7 +314,7 @@ export default function HabitsPage() {
                         onChange={(e) => setFormData({ ...formData, linked_goal_id: e.target.value || null })}
                         className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
                       >
-                        <option value="">No goal</option>
+                        <option value="">none</option>
                         {activeGoals.map((goal) => (
                           <option key={goal.id} value={goal.id}>
                             {goal.title} ({goal.year})
@@ -332,7 +332,7 @@ export default function HabitsPage() {
                         className="mt-0.5 h-5 w-5 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
                       />
                       <label htmlFor="requires_text" className="text-sm text-gray-700 leading-relaxed">
-                        Require notes when completing this habit
+                        make me write notes when i do this
                       </label>
                     </div>
                   </div>
@@ -343,14 +343,14 @@ export default function HabitsPage() {
                       onClick={handleCloseModal}
                       className="flex-1 px-6 py-4 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200"
                     >
-                      Cancel
+                      nevermind
                     </button>
                     <button
                       type="submit"
                       disabled={createHabit.isPending || updateHabit.isPending}
                       className="flex-1 px-6 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                     >
-                      {createHabit.isPending || updateHabit.isPending ? "Saving..." : editingHabit ? "Save changes" : "Create habit"}
+                      {createHabit.isPending || updateHabit.isPending ? "saving..." : editingHabit ? "save" : "add habit"}
                     </button>
                   </div>
                 </form>

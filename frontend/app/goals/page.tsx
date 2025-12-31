@@ -77,7 +77,7 @@ export default function GoalsPage() {
   };
 
   const handleDelete = async (goalId: string) => {
-    if (confirm("Delete this goal? Habits will not be deleted, but future links will be removed.")) {
+    if (confirm("delete this goal? (habits stay, but they'll unlink)")) {
       try {
         await deleteGoal.mutateAsync(goalId);
       } catch (error) {
@@ -92,7 +92,7 @@ export default function GoalsPage() {
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="text-center">
             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-            <p className="mt-6 text-gray-600 font-medium">Loading your goals...</p>
+            <p className="mt-6 text-gray-600 font-medium">loading...</p>
           </div>
         </div>
       </Layout>
@@ -104,8 +104,8 @@ export default function GoalsPage() {
       <div className="max-w-5xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-gray-900 mb-3">Your Goals</h1>
-          <p className="text-lg text-gray-600">Define your annual goals and link habits to achieve them</p>
+          <h1 className="text-4xl font-semibold text-gray-900 mb-3">your goals</h1>
+          <p className="text-lg text-gray-600">the big goals you&apos;re chasing this year</p>
         </div>
 
         {/* Add Goal Button */}
@@ -113,7 +113,7 @@ export default function GoalsPage() {
           onClick={() => handleOpenModal()}
           className="mb-10 px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
         >
-          + Add a new goal
+          + new goal
         </button>
 
         {activeGoals.length === 0 ? (
@@ -134,13 +134,13 @@ export default function GoalsPage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-3">No goals yet</h3>
-              <p className="text-gray-600 mb-8">Start your journey by creating your first goal</p>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-3">no goals yet</h3>
+              <p className="text-gray-600 mb-8">what&apos;s the first big thing you&apos;re going after?</p>
               <button
                 onClick={() => handleOpenModal()}
                 className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg"
               >
-                Create your first goal
+                add your first goal
               </button>
             </div>
           </div>
@@ -168,13 +168,13 @@ export default function GoalsPage() {
                       onClick={() => handleOpenModal(goal)}
                       className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors duration-200"
                     >
-                      Edit
+                      edit
                     </button>
                     <button
                       onClick={() => handleDelete(goal.id)}
                       className="px-5 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-200"
                     >
-                      Delete
+                      delete
                     </button>
                   </div>
                 </div>
@@ -197,7 +197,7 @@ export default function GoalsPage() {
               <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
                 <div className="flex items-center justify-between mb-8">
                   <h2 className="text-3xl font-semibold text-gray-900">
-                    {editingGoal ? "Edit goal" : "Create a goal"}
+                    {editingGoal ? "edit goal" : "new goal"}
                   </h2>
                   <button
                     onClick={handleCloseModal}
@@ -213,7 +213,7 @@ export default function GoalsPage() {
                   <div className="space-y-6">
                     <div>
                       <label htmlFor="title" className="block text-sm font-semibold text-gray-900 mb-2">
-                        Goal title
+                        what&apos;s the goal?
                       </label>
                       <input
                         type="text"
@@ -222,13 +222,13 @@ export default function GoalsPage() {
                         value={formData.title}
                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                         className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
-                        placeholder="Run a marathon, Learn Spanish..."
+                        placeholder="run a marathon, get fluent in spanish, read 50 books..."
                       />
                     </div>
 
                     <div>
                       <label htmlFor="year" className="block text-sm font-semibold text-gray-900 mb-2">
-                        Year
+                        which year?
                       </label>
                       <input
                         type="number"
@@ -244,7 +244,7 @@ export default function GoalsPage() {
 
                     <div>
                       <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-2">
-                        Description <span className="text-gray-400 font-normal">(optional)</span>
+                        details <span className="text-gray-400 font-normal">(if you want)</span>
                       </label>
                       <textarea
                         id="description"
@@ -252,7 +252,7 @@ export default function GoalsPage() {
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none"
                         rows={4}
-                        placeholder="Add details about what you want to achieve..."
+                        placeholder="what does success look like for this?"
                       />
                     </div>
                   </div>
@@ -263,14 +263,14 @@ export default function GoalsPage() {
                       onClick={handleCloseModal}
                       className="flex-1 px-6 py-4 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200"
                     >
-                      Cancel
+                      nevermind
                     </button>
                     <button
                       type="submit"
                       disabled={createGoal.isPending || updateGoal.isPending}
                       className="flex-1 px-6 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                     >
-                      {createGoal.isPending || updateGoal.isPending ? "Saving..." : editingGoal ? "Save changes" : "Create goal"}
+                      {createGoal.isPending || updateGoal.isPending ? "saving..." : editingGoal ? "save" : "add goal"}
                     </button>
                   </div>
                 </form>

@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 
 const navItems = [
-  { href: "/daily", label: "Daily" },
-  { href: "/habits", label: "Habits" },
-  { href: "/goals", label: "Goals" },
-  { href: "/progress", label: "Progress" },
+  { href: "/daily", label: "today" },
+  { href: "/habits", label: "habits" },
+  { href: "/goals", label: "goals" },
+  { href: "/progress", label: "stats" },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -28,7 +28,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                   </svg>
                 </div>
-                <span className="text-xl font-semibold text-gray-900">Habits</span>
+                <span className="text-xl font-semibold text-gray-900">habits</span>
               </Link>
 
               {/* Navigation */}
@@ -63,7 +63,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     onClick={() => signOut({ callbackUrl: "/" })}
                     className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors duration-200"
                   >
-                    Sign out
+                    peace out
                   </button>
                 </>
               )}

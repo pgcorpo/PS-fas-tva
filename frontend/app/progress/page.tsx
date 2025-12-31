@@ -84,8 +84,8 @@ export default function ProgressPage() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-gray-900 mb-3">Your Progress</h1>
-          <p className="text-lg text-gray-600">Track your weekly habit completion</p>
+          <h1 className="text-4xl font-semibold text-gray-900 mb-3">how you&apos;re doing</h1>
+          <p className="text-lg text-gray-600">see which weeks you showed up</p>
         </div>
 
         {/* Week Cards */}
