@@ -73,21 +73,50 @@ async function fetchWithAuth<T>(
   return handleResponse<T>(response);
 }
 
+// Token cache at module level
+let cachedToken: string | null = null;
+let tokenPromise: Promise<string | null> | null = null;
+
 /**
- * Get the JWT token from the token endpoint
+ * Get the JWT token from the token endpoint with caching
  */
 async function getToken(): Promise<string | null> {
-  try {
-    const response = await fetch("/api/token");
-    if (response.ok) {
-      const data = await response.json();
-      return data.token;
-    }
-    return null;
-  } catch (error) {
-    console.error("Failed to fetch token:", error);
-    return null;
+  // Return cached token if available
+  if (cachedToken) {
+    return cachedToken;
   }
+
+  // Deduplicate concurrent requests
+  if (tokenPromise) {
+    return tokenPromise;
+  }
+
+  // Fetch token
+  tokenPromise = (async () => {
+    try {
+      const response = await fetch("/api/token");
+      if (response.ok) {
+        const data = await response.json();
+        cachedToken = data.token;
+        return cachedToken;
+      }
+      return null;
+    } catch (error) {
+      console.error("Failed to fetch token:", error);
+      return null;
+    } finally {
+      tokenPromise = null;
+    }
+  })();
+
+  return tokenPromise;
+}
+
+/**
+ * Clear the token cache (call on logout or 401 errors)
+ */
+export function clearTokenCache() {
+  cachedToken = null;
 }
 
 // API Methods

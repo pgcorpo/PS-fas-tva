@@ -19,7 +19,7 @@ export default function Home() {
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
         <div className="text-center">
           <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-          <p className="mt-6 text-lg text-gray-600 font-medium">hold up...</p>
+          <p className="mt-6 text-lg text-gray-900 font-medium">hold up...</p>
         </div>
       </div>
     );
@@ -41,10 +41,10 @@ export default function Home() {
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
               fix your life, one habit at a time
             </h1>
-            <p className="text-xl text-gray-600 mb-4 leading-relaxed max-w-xl mx-auto">
+            <p className="text-xl text-gray-700 mb-4 leading-relaxed max-w-xl mx-auto">
               track what matters, link it to your big picture goals, actually do the thing
             </p>
-            <p className="text-lg text-gray-500 max-w-lg mx-auto">
+            <p className="text-lg text-gray-600 max-w-lg mx-auto">
               show up daily, stay motivated, become that person
             </p>
           </div>
@@ -58,7 +58,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">daily check-ins</h3>
-              <p className="text-sm text-gray-600">check off your daily wins, journal if you feel like it</p>
+              <p className="text-sm text-gray-700">check off your daily wins, journal if you feel like it</p>
             </div>
 
             <div className="text-center p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
@@ -68,7 +68,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">weekly targets</h3>
-              <p className="text-sm text-gray-600">set goals, watch yourself actually hit them</p>
+              <p className="text-sm text-gray-700">set goals, watch yourself actually hit them</p>
             </div>
 
             <div className="text-center p-6 bg-white rounded-2xl border border-gray-200 shadow-sm">
@@ -78,7 +78,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">your dashboard</h3>
-              <p className="text-sm text-gray-600">see how consistent you really are</p>
+              <p className="text-sm text-gray-700">see how consistent you really are</p>
             </div>
           </div>
 
@@ -96,7 +96,7 @@ export default function Home() {
               </svg>
               sign in with google
             </button>
-            <p className="mt-6 text-sm text-gray-500">
+            <p className="mt-6 text-sm text-gray-600">
               100% free · no catch
             </p>
           </div>

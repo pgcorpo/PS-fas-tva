@@ -85,7 +85,7 @@ export default function ProgressPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-semibold text-gray-900 mb-3">how you&apos;re doing</h1>
-          <p className="text-lg text-gray-600">see which weeks you showed up</p>
+          <p className="text-lg text-gray-700">see which weeks you showed up</p>
         </div>
 
         {/* Week Cards */}

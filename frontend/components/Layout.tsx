@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { clearTokenCache } from "@/lib/apiClient";
 
 const navItems = [
   { href: "/daily", label: "today" },
@@ -60,7 +61,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     {session.user.email}
                   </span>
                   <button
-                    onClick={() => signOut({ callbackUrl: "/" })}
+                    onClick={() => {
+                      clearTokenCache();
+                      signOut({ callbackUrl: "/" });
+                    }}
                     className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors duration-200"
                   >
                     peace out

@@ -18,6 +18,7 @@ export default function GoalsPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<{ id: string; title: string; year: number; description: string | null } | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<GoalFormData>({
     title: "",
     year: new Date().getFullYear(),
@@ -27,6 +28,7 @@ export default function GoalsPage() {
   const activeGoals = goals.filter((g) => !g.is_deleted);
 
   const handleOpenModal = (goal?: typeof activeGoals[0]) => {
+    setError(null); // Clear any previous errors
     if (goal) {
       setEditingGoal(goal);
       setFormData({
@@ -52,6 +54,7 @@ export default function GoalsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); // Clear previous errors
 
     try {
       if (editingGoal) {
@@ -71,8 +74,15 @@ export default function GoalsPage() {
         });
       }
       handleCloseModal();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to save goal:", error);
+      // Show user-friendly error message
+      if (error.status === 401) {
+        setError("session expired. please refresh the page and try again.");
+      } else {
+        setError("failed to save. please try again.");
+      }
+      // Don't close modal on error - let user retry
     }
   };
 
@@ -92,7 +102,7 @@ export default function GoalsPage() {
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="text-center">
             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-            <p className="mt-6 text-gray-600 font-medium">loading...</p>
+            <p className="mt-6 text-gray-900 font-medium">loading...</p>
           </div>
         </div>
       </Layout>
@@ -105,7 +115,7 @@ export default function GoalsPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-semibold text-gray-900 mb-3">your goals</h1>
-          <p className="text-lg text-gray-600">the big goals you&apos;re chasing this year</p>
+          <p className="text-lg text-gray-700">the big goals you&apos;re chasing this year</p>
         </div>
 
         {/* Add Goal Button */}
@@ -135,7 +145,7 @@ export default function GoalsPage() {
                 </svg>
               </div>
               <h3 className="text-2xl font-semibold text-gray-900 mb-3">no goals yet</h3>
-              <p className="text-gray-600 mb-8">what&apos;s the first big thing you&apos;re going after?</p>
+              <p className="text-gray-700 mb-8">what&apos;s the first big thing you&apos;re going after?</p>
               <button
                 onClick={() => handleOpenModal()}
                 className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg"
@@ -160,7 +170,7 @@ export default function GoalsPage() {
                       </span>
                     </div>
                     {goal.description && (
-                      <p className="text-gray-600 leading-relaxed">{goal.description}</p>
+                      <p className="text-gray-700 leading-relaxed">{goal.description}</p>
                     )}
                   </div>
                   <div className="flex gap-3 ml-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -244,7 +254,7 @@ export default function GoalsPage() {
 
                     <div>
                       <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-2">
-                        details <span className="text-gray-400 font-normal">(if you want)</span>
+                        details <span className="text-gray-600 font-normal">(if you want)</span>
                       </label>
                       <textarea
                         id="description"
@@ -256,6 +266,13 @@ export default function GoalsPage() {
                       />
                     </div>
                   </div>
+
+                  {/* Error Message */}
+                  {error && (
+                    <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+                      <p className="text-sm text-red-600">{error}</p>
+                    </div>
+                  )}
 
                   <div className="flex gap-4 mt-8">
                     <button

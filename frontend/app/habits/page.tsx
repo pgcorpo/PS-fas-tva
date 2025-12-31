@@ -21,6 +21,7 @@ export default function HabitsPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingHabit, setEditingHabit] = useState<typeof activeHabits[0] | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<HabitFormData>({
     name: "",
     weekly_target: 3,
@@ -32,6 +33,7 @@ export default function HabitsPage() {
   const activeGoals = goals.filter((g) => !g.is_deleted);
 
   const handleOpenModal = (habit?: typeof activeHabits[0]) => {
+    setError(null); // Clear any previous errors
     if (habit) {
       const latestVersion = habit.versions[0];
       setEditingHabit(habit);
@@ -60,6 +62,7 @@ export default function HabitsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); // Clear previous errors
 
     try {
       if (editingHabit) {
@@ -71,8 +74,15 @@ export default function HabitsPage() {
         await createHabit.mutateAsync(formData);
       }
       handleCloseModal();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to save habit:", error);
+      // Show user-friendly error message
+      if (error.status === 401) {
+        setError("session expired. please refresh the page and try again.");
+      } else {
+        setError("failed to save. please try again.");
+      }
+      // Don't close modal on error - let user retry
     }
   };
 
@@ -92,7 +102,7 @@ export default function HabitsPage() {
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="text-center">
             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-            <p className="mt-6 text-gray-600 font-medium">loading...</p>
+            <p className="mt-6 text-gray-900 font-medium">loading...</p>
           </div>
         </div>
       </Layout>
@@ -105,7 +115,7 @@ export default function HabitsPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-semibold text-gray-900 mb-3">your habits</h1>
-          <p className="text-lg text-gray-600">the habits that&apos;ll actually change your life</p>
+          <p className="text-lg text-gray-700">the habits that&apos;ll actually change your life</p>
         </div>
 
         {/* Add Habit Button */}
@@ -135,7 +145,7 @@ export default function HabitsPage() {
                 </svg>
               </div>
               <h3 className="text-2xl font-semibold text-gray-900 mb-3">no habits yet</h3>
-              <p className="text-gray-600 mb-8">add your first habit and start the grind</p>
+              <p className="text-gray-700 mb-8">add your first habit and start the grind</p>
               <button
                 onClick={() => handleOpenModal()}
                 className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg"
@@ -301,12 +311,12 @@ export default function HabitsPage() {
                         onChange={(e) => setFormData({ ...formData, weekly_target: parseInt(e.target.value) })}
                         className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
                       />
-                      <p className="mt-2 text-sm text-gray-500">realistic number, be honest with yourself (1-7)</p>
+                      <p className="mt-2 text-sm text-gray-600">realistic number, be honest with yourself (1-7)</p>
                     </div>
 
                     <div>
                       <label htmlFor="linked_goal" className="block text-sm font-semibold text-gray-900 mb-2">
-                        connects to which goal? <span className="text-gray-400 font-normal">(optional)</span>
+                        connects to which goal? <span className="text-gray-600 font-normal">(optional)</span>
                       </label>
                       <select
                         id="linked_goal"
@@ -336,6 +346,13 @@ export default function HabitsPage() {
                       </label>
                     </div>
                   </div>
+
+                  {/* Error Message */}
+                  {error && (
+                    <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+                      <p className="text-sm text-red-600">{error}</p>
+                    </div>
+                  )}
 
                   <div className="flex gap-4 mt-8">
                     <button
