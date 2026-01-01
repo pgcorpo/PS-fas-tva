@@ -19,6 +19,10 @@ export default function DailyPage() {
   const isToday = isTodayDate(selectedDate);
   const isPast = isPastDate(selectedDate);
 
+  const [isNotesModalOpen, setIsNotesModalOpen] = useState(false);
+  const [selectedHabitForNotes, setSelectedHabitForNotes] = useState<{ habitId: string; habitName: string } | null>(null);
+  const [notesText, setNotesText] = useState("");
+
   const { data: habits = [], isLoading: habitsLoading } = useHabits();
   const weekRange = getWeekRange(selectedDate);
   const { data: completions = [], isLoading: completionsLoading } = useCompletions(
@@ -42,9 +46,13 @@ export default function DailyPage() {
 
       const remaining = Math.max(0, version.weekly_target - completedCount);
 
+      const completedForDate = completions.filter(
+        (c) => c.habit_id === habit.id && c.date === selectedDate
+      );
+
       // Determine how many instances to render
       let renderCount = 0;
-      if (remaining > 0) {
+      if (remaining > 0 && completedForDate.length === 0) {
         if (isToday) {
           const today = new Date(selectedDate);
           const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
@@ -58,10 +66,6 @@ export default function DailyPage() {
         }
       }
 
-      const completedForDate = completions.filter(
-        (c) => c.habit_id === habit.id && c.date === selectedDate
-      );
-
       return {
         habit,
         version,
@@ -72,7 +76,7 @@ export default function DailyPage() {
     })
     .filter((item): item is NonNullable<typeof item> => item !== null);
 
-  const handleComplete = async (habitId: string) => {
+  const handleComplete = async (habitId: string, text?: string) => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const offsetMinutes = new Date().getTimezoneOffset() * -1;
 
@@ -80,6 +84,7 @@ export default function DailyPage() {
       await createCompletion.mutateAsync({
         habit_id: habitId,
         date: selectedDate,
+        text: text || null,
         client_timezone: timezone,
         client_tz_offset_minutes: offsetMinutes,
       });
@@ -164,8 +169,13 @@ export default function DailyPage() {
                           className="w-6 h-6 text-pink-500 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:ring-offset-0 cursor-pointer transition-all"
                           onChange={() => {
                             if (item.version.requires_text_on_completion) {
-                              // TODO: Open inline text editor
-                              alert("needs notes - editor dropping soon");
+                              // Open notes modal
+                              setSelectedHabitForNotes({
+                                habitId: item.habit.id,
+                                habitName: item.habit.name
+                              });
+                              setNotesText("");
+                              setIsNotesModalOpen(true);
                             } else {
                               handleComplete(item.habit.id);
                             }
@@ -237,6 +247,84 @@ export default function DailyPage() {
           )}
         </div>
       </div>
+
+      {/* Notes Modal */}
+      {isNotesModalOpen && selectedHabitForNotes && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center p-4">
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black bg-opacity-40 transition-opacity backdrop-blur-sm"
+              onClick={() => {
+                setIsNotesModalOpen(false);
+                setSelectedHabitForNotes(null);
+                setNotesText("");
+              }}
+            />
+
+            {/* Modal Content */}
+            <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-semibold text-gray-900">
+                  add notes
+                </h2>
+                <button
+                  onClick={() => {
+                    setIsNotesModalOpen(false);
+                    setSelectedHabitForNotes(null);
+                    setNotesText("");
+                  }}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <p className="text-sm text-gray-900 mb-4">
+                {selectedHabitForNotes.habitName}
+              </p>
+
+              <textarea
+                value={notesText}
+                onChange={(e) => setNotesText(e.target.value)}
+                className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none"
+                rows={6}
+                placeholder="what did you do? how'd it go?"
+                autoFocus
+              />
+
+              <div className="flex gap-4 mt-6">
+                <button
+                  onClick={() => {
+                    setIsNotesModalOpen(false);
+                    setSelectedHabitForNotes(null);
+                    setNotesText("");
+                  }}
+                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200"
+                >
+                  cancel
+                </button>
+                <button
+                  onClick={async () => {
+                    if (notesText.trim()) {
+                      await handleComplete(selectedHabitForNotes.habitId, notesText.trim());
+                      setIsNotesModalOpen(false);
+                      setSelectedHabitForNotes(null);
+                      setNotesText("");
+                    }
+                  }}
+                  disabled={!notesText.trim()}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                >
+                  mark as done
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }

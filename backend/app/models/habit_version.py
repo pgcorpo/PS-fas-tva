@@ -17,6 +17,7 @@ class HabitVersion(Base):
     weekly_target = Column(Integer, nullable=False)
     requires_text_on_completion = Column(Boolean, nullable=False, default=False)
     linked_goal_id = Column(UUID(as_uuid=False), ForeignKey("goals.id"), nullable=True)
+    description = Column(String, nullable=True)
     effective_week_start = Column(Date, nullable=False, index=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)

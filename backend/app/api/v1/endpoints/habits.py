@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 from datetime import date
 from app.core.database import get_db
@@ -31,22 +31,20 @@ async def list_habits(
     current_user: User = Depends(get_current_user),
 ):
     """List all non-deleted habits with their versions"""
-    habits = db.query(Habit).filter(
+    habits = db.query(Habit).options(
+        joinedload(Habit.versions)
+    ).filter(
         Habit.user_id == current_user.id,
         Habit.is_deleted == False,
     ).order_by(Habit.order_index.asc(), Habit.created_at.asc()).all()
-    
-    # Load versions for each habit
+
+    # Build response using pre-loaded versions
     result = []
     for habit in habits:
-        versions = db.query(HabitVersion).filter(
-            HabitVersion.habit_id == habit.id
-        ).order_by(HabitVersion.effective_week_start.desc()).all()
-        
-        # Build response with linked_goal_id from latest version (for display)
-        latest_version = versions[0] if versions else None
+        # Versions are already loaded via joinedload
+        latest_version = habit.versions[0] if habit.versions else None
         linked_goal_id = latest_version.linked_goal_id if latest_version else None
-        
+
         result.append({
             "id": habit.id,
             "name": habit.name,
@@ -55,9 +53,9 @@ async def list_habits(
             "is_deleted": habit.is_deleted,
             "created_at": habit.created_at,
             "updated_at": habit.updated_at,
-            "versions": versions,
+            "versions": habit.versions,
         })
-    
+
     return result
 
 
@@ -100,6 +98,7 @@ async def create_habit(
         weekly_target=habit_data.weekly_target,
         requires_text_on_completion=habit_data.requires_text_on_completion,
         linked_goal_id=habit_data.linked_goal_id,
+        description=habit_data.description,
         effective_week_start=current_week_start,
     )
     db.add(version)
@@ -154,6 +153,7 @@ async def update_habit(
         weekly_target=habit_data.weekly_target,
         requires_text_on_completion=habit_data.requires_text_on_completion,
         linked_goal_id=habit_data.linked_goal_id,
+        description=habit_data.description,
         effective_week_start=next_monday,
     )
     db.add(version)

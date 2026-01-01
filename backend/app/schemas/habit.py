@@ -8,6 +8,7 @@ class HabitVersionResponse(BaseModel):
     weekly_target: int
     requires_text_on_completion: bool
     linked_goal_id: Optional[str]
+    description: Optional[str]
     effective_week_start: date
     created_at: datetime
     updated_at: datetime
@@ -35,6 +36,7 @@ class HabitCreate(BaseModel):
     weekly_target: int = Field(..., ge=1)
     requires_text_on_completion: bool = False
     linked_goal_id: Optional[str] = None
+    description: Optional[str] = None
     order_index: int = 0
     client_timezone: Optional[str] = None
     client_tz_offset_minutes: Optional[int] = None
@@ -45,6 +47,7 @@ class HabitUpdate(BaseModel):
     weekly_target: int = Field(..., ge=1)
     requires_text_on_completion: bool = False
     linked_goal_id: Optional[str] = None
+    description: Optional[str] = None
     order_index: int = 0
     client_timezone: Optional[str] = None
     client_tz_offset_minutes: Optional[int] = None

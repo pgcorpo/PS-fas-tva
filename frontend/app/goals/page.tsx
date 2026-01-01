@@ -259,7 +259,7 @@ export default function GoalsPage() {
 
                     <div>
                       <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-2">
-                        details <span className="text-gray-700 font-normal">(if you want)</span>
+                        tell us more <span className="text-gray-700 font-normal">(if you want)</span>
                       </label>
                       <textarea
                         id="description"

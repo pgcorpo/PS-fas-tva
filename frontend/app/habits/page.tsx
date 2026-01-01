@@ -10,6 +10,7 @@ interface HabitFormData {
   weekly_target: number;
   requires_text_on_completion: boolean;
   linked_goal_id: string | null;
+  description: string;
 }
 
 export default function HabitsPage() {
@@ -27,6 +28,7 @@ export default function HabitsPage() {
     weekly_target: 3,
     requires_text_on_completion: false,
     linked_goal_id: null,
+    description: "",
   });
 
   const activeHabits = habits.filter((h) => !h.is_deleted);
@@ -42,6 +44,7 @@ export default function HabitsPage() {
         weekly_target: latestVersion?.weekly_target || 3,
         requires_text_on_completion: latestVersion?.requires_text_on_completion || false,
         linked_goal_id: latestVersion?.linked_goal_id || null,
+        description: latestVersion?.description || "",
       });
     } else {
       setEditingHabit(null);
@@ -50,6 +53,7 @@ export default function HabitsPage() {
         weekly_target: 3,
         requires_text_on_completion: false,
         linked_goal_id: null,
+        description: "",
       });
     }
     setIsModalOpen(true);
@@ -336,6 +340,20 @@ export default function HabitsPage() {
                           </option>
                         ))}
                       </select>
+                    </div>
+
+                    <div>
+                      <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-2">
+                        tell us more <span className="text-gray-700 font-normal">(if you want)</span>
+                      </label>
+                      <textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none"
+                        rows={3}
+                        placeholder="any extra context about this habit..."
+                      />
                     </div>
 
                     <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
