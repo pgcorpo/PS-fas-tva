@@ -20,10 +20,14 @@ export default function ProgressPage() {
     { weekStartsOn: 1 }
   );
 
+  // Calculate the full date range for all weeks (including overlap into adjacent months)
+  const firstWeekStart = weeks.length > 0 ? weeks[0] : monthStart;
+  const lastWeekEnd = weeks.length > 0 ? addDays(weeks[weeks.length - 1], 6) : monthEnd;
+
   const { data: habits = [] } = useHabits();
   const { data: completions = [] } = useCompletions(
-    format(monthStart, "yyyy-MM-dd"),
-    format(monthEnd, "yyyy-MM-dd")
+    format(firstWeekStart, "yyyy-MM-dd"),
+    format(lastWeekEnd, "yyyy-MM-dd")
   );
 
   // Calculate selected week
@@ -150,13 +154,13 @@ export default function ProgressPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-semibold text-gray-900 mb-2">how you&apos;re doing</h1>
-          <p className="text-lg text-gray-900">see your week at a glance</p>
+          <p className="text-lg text-gray-900">pick a week to see your daily breakdown</p>
         </div>
 
-        {/* Top Section: Mini Calendar + Week Stats */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-8">
-          {/* Mini Calendar - Left */}
-          <div className="w-full lg:w-2/5">
+        {/* Top Section: Enhanced Mini Calendar */}
+        <div className="mb-8">
+          {/* Mini Calendar - Full Width */}
+          <div className="w-full max-w-2xl mx-auto">
             <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
               {/* Month Navigation */}
               <div className="flex items-center justify-between mb-4">
@@ -190,9 +194,9 @@ export default function ProgressPage() {
                     key={week.weekStartStr}
                     onClick={() => week.color && setSelectedDate(week.weekStart)}
                     disabled={!week.color}
-                    className={`w-full p-3 rounded-xl border transition-all duration-200 text-left ${
+                    className={`w-full p-4 rounded-xl border transition-all duration-200 text-left ${
                       week.isSelected
-                        ? "ring-2 ring-pink-500 border-pink-500 bg-white"
+                        ? "ring-2 ring-pink-500 border-pink-500 bg-white shadow-md"
                         : !week.color
                         ? "bg-white border-gray-200 opacity-50 cursor-not-allowed"
                         : week.percentage < 25
@@ -203,83 +207,42 @@ export default function ProgressPage() {
                     }`}
                   >
                     <div className="flex items-center justify-between">
+                      {/* Date range */}
                       <span className="text-sm font-medium text-gray-900">
-                        {format(week.weekStart, "MMM d")} - {format(week.weekEnd, "d")}
+                        {format(week.weekStart, "MMM d")} - {format(week.weekEnd, "MMM d")}
                       </span>
+
+                      {/* Completion stats */}
                       {week.required > 0 && (
-                        <span className="text-xs font-semibold px-2 py-0.5 bg-white rounded-full">
-                          {Math.round(week.percentage)}%
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-700">
+                            {week.completed}/{week.required}
+                          </span>
+                          <span className="text-xs font-semibold px-2.5 py-1 bg-white rounded-full shadow-sm">
+                            {Math.round(week.percentage)}%
+                          </span>
+                        </div>
                       )}
                     </div>
+
+                    {/* Mini progress bar */}
+                    {week.required > 0 && (
+                      <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                        <div
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            week.percentage < 25
+                              ? "bg-gradient-to-r from-red-500 to-rose-500"
+                              : week.percentage <= 75
+                              ? "bg-gradient-to-r from-yellow-400 to-amber-500"
+                              : "bg-gradient-to-r from-green-500 to-emerald-500"
+                          }`}
+                          style={{ width: `${Math.min(100, week.percentage)}%` }}
+                        />
+                      </div>
+                    )}
                   </button>
                 ))}
               </div>
-            </div>
-          </div>
-
-          {/* Week Stats Card - Right */}
-          <div className="w-full lg:w-3/5">
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-              {/* Week Navigation */}
-              <div className="flex items-center justify-between mb-4">
-                <button
-                  onClick={() => setSelectedDate(addDays(parseISO(selectedWeekStart), -7))}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  aria-label="Previous week"
-                >
-                  <svg className="w-5 h-5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Week of {format(parseISO(selectedWeekStart), "MMM d")} - {format(parseISO(selectedWeekEnd), "d, yyyy")}
-                </h3>
-                <button
-                  onClick={() => setSelectedDate(addDays(parseISO(selectedWeekStart), 7))}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  aria-label="Next week"
-                >
-                  <svg className="w-5 h-5 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Overall Stats */}
-              {selectedWeekStats && selectedWeekStats.required > 0 && (
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-900">Overall Progress</span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {selectedWeekStats.completed} / {selectedWeekStats.required}
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden mb-2">
-                    <div
-                      className={`h-3 rounded-full transition-all duration-500 ${
-                        selectedWeekStats.percentage < 25
-                          ? "bg-gradient-to-r from-red-500 to-rose-500"
-                          : selectedWeekStats.percentage <= 75
-                          ? "bg-gradient-to-r from-yellow-400 to-amber-500"
-                          : "bg-gradient-to-r from-green-500 to-emerald-500"
-                      }`}
-                      style={{ width: `${Math.min(100, selectedWeekStats.percentage)}%` }}
-                    />
-                  </div>
-                  <div className="text-right">
-                    <span className={`text-lg font-semibold ${
-                      selectedWeekStats.percentage < 25
-                        ? "text-red-600"
-                        : selectedWeekStats.percentage <= 75
-                        ? "text-yellow-600"
-                        : "text-green-600"
-                    }`}>
-                      {Math.round(selectedWeekStats.percentage)}%
-                    </span>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
