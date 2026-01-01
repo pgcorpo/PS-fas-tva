@@ -389,7 +389,7 @@ export default function ProgressPage() {
                                           </div>
                                           {completion.text && (
                                             <p className="text-sm text-gray-900 mt-1">
-                                              "{completion.text}"
+                                              &quot;{completion.text}&quot;
                                             </p>
                                           )}
                                         </div>
