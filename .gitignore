@@ -56,3 +56,9 @@ coverage/
 .cache/
 client_secret_*.json
 *.json
+
+# Database backups (local copies only - scripts are safe to commit)
+backup.log
+db-backups/
+*.sql
+*.sql.gz
