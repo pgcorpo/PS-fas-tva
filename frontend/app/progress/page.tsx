@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { useHabits } from "@/hooks/queries/useHabits";
-import { useCompletions } from "@/hooks/queries/useCompletions";
+import { useCompletions, useHabitCompletions } from "@/hooks/queries/useCompletions";
 import { getWeekRange, formatDate, getWeekStart, getWeekEnd } from "@/lib/dateUtils";
 import { getActiveVersion } from "@/lib/habitUtils";
 import { startOfMonth, endOfMonth, eachWeekOfInterval, format, addDays, parseISO, addMonths } from "date-fns";
@@ -12,6 +12,8 @@ export default function ProgressPage() {
   const [viewMonth, setViewMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [expandedHabitId, setExpandedHabitId] = useState<string | null>(null);
+  const [habitHistoryOffset, setHabitHistoryOffset] = useState(0);
+  const [allHabitCompletions, setAllHabitCompletions] = useState<Array<any>>([]);
 
   const monthStart = startOfMonth(viewMonth);
   const monthEnd = endOfMonth(viewMonth);
@@ -29,6 +31,40 @@ export default function ProgressPage() {
     format(firstWeekStart, "yyyy-MM-dd"),
     format(lastWeekEnd, "yyyy-MM-dd")
   );
+
+  // Fetch habit-specific completions for pagination
+  const { data: habitCompletions = [], isLoading: isLoadingHistory } = useHabitCompletions(
+    expandedHabitId,
+    20,
+    habitHistoryOffset
+  );
+
+  // Accumulate habit completions when new data arrives
+  useEffect(() => {
+    if (habitCompletions.length > 0) {
+      if (habitHistoryOffset === 0) {
+        // First load - replace all
+        setAllHabitCompletions(habitCompletions);
+      } else {
+        // Load more - append
+        setAllHabitCompletions(prev => [...prev, ...habitCompletions]);
+      }
+    }
+  }, [habitCompletions, habitHistoryOffset]);
+
+  // Reset when habit changes
+  useEffect(() => {
+    setHabitHistoryOffset(0);
+    setAllHabitCompletions([]);
+  }, [expandedHabitId]);
+
+  // Format completions for display
+  const formattedHabitHistory = allHabitCompletions.map(c => ({
+    id: c.id,
+    date: c.date,
+    dateFormatted: format(parseISO(c.date), "EEE, MMM d"),
+    text: c.text
+  }));
 
   // Calculate selected week
   const selectedWeekStart = getWeekStart(selectedDate);
@@ -133,20 +169,6 @@ export default function ProgressPage() {
 
   // Calculate selected week overall stats
   const selectedWeekStats = weekProgress.find(w => w.weekStartStr === selectedWeekStart);
-
-  // Function to get habit history
-  const getHabitHistory = (habitId: string) => {
-    return completions
-      .filter(c => c.habit_id === habitId)
-      .sort((a, b) => b.date.localeCompare(a.date))
-      .slice(0, 20)
-      .map(c => ({
-        id: c.id,
-        date: c.date,
-        dateFormatted: format(parseISO(c.date), "EEE, MMM d"),
-        text: c.text
-      }));
-  };
 
   return (
     <Layout>
@@ -325,7 +347,7 @@ export default function ProgressPage() {
                             <div className="space-y-2">
                               <div className="flex items-center justify-between mb-3">
                                 <h4 className="text-sm font-semibold text-gray-900">
-                                  last 20 completions
+                                  completion history
                                 </h4>
                                 <button
                                   onClick={() => setExpandedHabitId(null)}
@@ -335,15 +357,19 @@ export default function ProgressPage() {
                                 </button>
                               </div>
 
-                              {(() => {
-                                const history = getHabitHistory(item.habit.id);
-                                return history.length === 0 ? (
-                                  <p className="text-sm text-gray-600 text-center py-4">
-                                    no completions yet
-                                  </p>
-                                ) : (
+                              {/* Loading state */}
+                              {isLoadingHistory && habitHistoryOffset === 0 ? (
+                                <p className="text-sm text-gray-600 text-center py-4">
+                                  loading...
+                                </p>
+                              ) : formattedHabitHistory.length === 0 ? (
+                                <p className="text-sm text-gray-600 text-center py-4">
+                                  no completions yet
+                                </p>
+                              ) : (
+                                <>
                                   <div className="space-y-2 max-h-64 overflow-y-auto">
-                                    {history.map(completion => (
+                                    {formattedHabitHistory.map(completion => (
                                       <div key={completion.id} className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200">
                                         <span className="text-green-500 text-sm flex-shrink-0">✓</span>
                                         <div className="flex-1">
@@ -359,8 +385,21 @@ export default function ProgressPage() {
                                       </div>
                                     ))}
                                   </div>
-                                );
-                              })()}
+
+                                  {/* Load More button */}
+                                  {habitCompletions.length === 20 && (
+                                    <div className="text-center mt-3">
+                                      <button
+                                        onClick={() => setHabitHistoryOffset(prev => prev + 20)}
+                                        disabled={isLoadingHistory}
+                                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                      >
+                                        {isLoadingHistory ? "loading..." : "load more"}
+                                      </button>
+                                    </div>
+                                  )}
+                                </>
+                              )}
                             </div>
                           </td>
                         </tr>

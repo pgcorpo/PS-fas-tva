@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import date
 from app.core.database import get_db
 from app.core.auth import get_current_user
 from app.models.user import User
+from app.models.habit import Habit
 from app.models.habit_completion import HabitCompletion
 from app.schemas.completion import CompletionCreate, CompletionResponse
 from app.core.errors import (
@@ -53,7 +54,40 @@ async def list_completions(
         HabitCompletion.date >= start_date,
         HabitCompletion.date <= end_date,
     ).order_by(HabitCompletion.date.desc(), HabitCompletion.created_at.desc()).all()
-    
+
+    return completions
+
+
+@router.get("/habits/{habit_id}/completions", response_model=List[CompletionResponse])
+async def get_habit_completions(
+    habit_id: str,
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Get completions for a specific habit with pagination.
+    Returns most recent completions first.
+    """
+    # Verify habit belongs to user
+    habit = db.query(Habit).filter(
+        Habit.id == habit_id,
+        Habit.user_id == current_user.id
+    ).first()
+
+    if not habit:
+        raise HTTPException(status_code=404, detail="Habit not found")
+
+    # Query completions with pagination
+    completions = db.query(HabitCompletion).filter(
+        HabitCompletion.habit_id == habit_id,
+        HabitCompletion.user_id == current_user.id,
+    ).order_by(
+        HabitCompletion.date.desc(),
+        HabitCompletion.created_at.desc()
+    ).limit(limit).offset(offset).all()
+
     return completions
 
 

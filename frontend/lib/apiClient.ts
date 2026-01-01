@@ -295,6 +295,29 @@ export const api = {
     >(`/api/completions?start=${start}&end=${end}`, {}, token ?? undefined);
   },
 
+  getHabitCompletions: async (
+    habitId: string,
+    limit: number = 20,
+    offset: number = 0
+  ) => {
+    const token = await getToken();
+    return fetchWithAuth<
+      Array<{
+        id: string;
+        habit_id: string;
+        user_id: string;
+        date: string;
+        text: string | null;
+        created_at: string;
+        updated_at: string;
+      }>
+    >(
+      `/api/habits/${habitId}/completions?limit=${limit}&offset=${offset}`,
+      {},
+      token ?? undefined
+    );
+  },
+
   createCompletion: async (data: {
     habit_id: string;
     date: string;

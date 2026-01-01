@@ -21,7 +21,7 @@ export function useCreateCompletion() {
 
 export function useDeleteCompletion() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ completionId, clientTimezone, clientTzOffsetMinutes }: {
       completionId: string;
@@ -31,5 +31,21 @@ export function useDeleteCompletion() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["completions"] });
     },
+  });
+}
+
+export function useHabitCompletions(
+  habitId: string | null,
+  limit: number = 20,
+  offset: number = 0
+) {
+  return useQuery({
+    queryKey: ["habitCompletions", habitId, limit, offset],
+    queryFn: async () => {
+      if (!habitId) return [];
+      return api.getHabitCompletions(habitId, limit, offset);
+    },
+    enabled: !!habitId, // Only fetch when habitId is provided
+    staleTime: 60 * 1000, // 60 seconds
   });
 }
