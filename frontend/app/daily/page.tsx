@@ -34,8 +34,8 @@ export default function DailyPage() {
   const deleteCompletion = useDeleteCompletion();
 
   // Calculate remaining instances for each habit
+  // Show all habits (including deleted) to access completion data
   const habitInstances = habits
-    .filter((habit) => !habit.is_deleted)
     .map((habit) => {
       const version = getActiveVersion(habit, weekRange.start);
       if (!version) return null;
@@ -144,7 +144,7 @@ export default function DailyPage() {
               </h2>
             </div>
 
-            {habitInstances.filter((item) => item.renderCount > 0).length === 0 ? (
+            {habitInstances.filter((item) => !item.habit.is_deleted && item.renderCount > 0).length === 0 ? (
               <div className="text-center py-16 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -157,7 +157,7 @@ export default function DailyPage() {
             ) : (
               <div className="space-y-3">
                 {habitInstances
-                  .filter((item) => item.renderCount > 0)
+                  .filter((item) => !item.habit.is_deleted && item.renderCount > 0)
                   .flatMap((item) =>
                     Array.from({ length: item.renderCount }, (_, i) => (
                       <div

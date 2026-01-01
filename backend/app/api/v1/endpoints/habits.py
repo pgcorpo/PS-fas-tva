@@ -115,7 +115,7 @@ async def update_habit(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Update a habit (creates new version effective next Monday)"""
+    """Update a habit (changes effective immediately from current week)"""
     # Validate habit exists and is owned
     is_valid, habit = validate_habit_exists_and_owned(db, habit_id, current_user.id)
     if not is_valid:
@@ -142,19 +142,19 @@ async def update_habit(
     # Update base habit fields
     habit.name = habit_data.name
     habit.order_index = habit_data.order_index
-    
-    # Calculate next Monday
+
+    # Calculate current week's Monday (immediate effect)
     today = date.today()
-    next_monday = get_next_monday(today)
-    
-    # Create new version effective next Monday
+    current_week_start = get_week_start(today)
+
+    # Create new version effective immediately from current week
     version = HabitVersion(
         habit_id=habit.id,
         weekly_target=habit_data.weekly_target,
         requires_text_on_completion=habit_data.requires_text_on_completion,
         linked_goal_id=habit_data.linked_goal_id,
         description=habit_data.description,
-        effective_week_start=next_monday,
+        effective_week_start=current_week_start,
     )
     db.add(version)
     db.commit()
