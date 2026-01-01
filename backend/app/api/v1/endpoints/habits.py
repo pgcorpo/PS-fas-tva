@@ -30,12 +30,12 @@ async def list_habits(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """List all non-deleted habits with their versions"""
+    """List all habits with their versions (including deleted for historical views)"""
     habits = db.query(Habit).options(
         joinedload(Habit.versions)
     ).filter(
         Habit.user_id == current_user.id,
-        Habit.is_deleted == False,
+        # Removed is_deleted filter - frontend handles display logic
     ).order_by(Habit.order_index.asc(), Habit.created_at.asc()).all()
 
     # Build response using pre-loaded versions

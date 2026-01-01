@@ -83,7 +83,7 @@ export default function ProgressPage() {
     let completed = 0;
 
     habits
-      .filter((h) => !h.is_deleted)
+      // Show all habits (including deleted) in progress calculations
       .forEach((habit) => {
         const version = getActiveVersion(habit, weekStartStr);
         if (version) {
@@ -137,7 +137,7 @@ export default function ProgressPage() {
 
   // Build habit grid data (habits × days matrix)
   const habitGridData = habits
-    .filter(h => !h.is_deleted)
+    // Show all habits (including deleted) to display historical data
     .map(habit => {
       const version = getActiveVersion(habit, selectedWeekStart);
       if (!version) return null;
