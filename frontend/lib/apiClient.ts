@@ -215,6 +215,7 @@ export const api = {
           weekly_target: number;
           requires_text_on_completion: boolean;
           linked_goal_id: string | null;
+          description: string | null;
           effective_week_start: string;
           created_at: string;
           updated_at: string;
@@ -228,6 +229,7 @@ export const api = {
     weekly_target: number;
     requires_text_on_completion: boolean;
     linked_goal_id?: string | null;
+    description?: string | null;
     order_index?: number;
     client_timezone?: string | null;
     client_tz_offset_minutes?: number | null;
@@ -250,6 +252,7 @@ export const api = {
       weekly_target: number;
       requires_text_on_completion: boolean;
       linked_goal_id?: string | null;
+      description?: string | null;
       order_index?: number;
       client_timezone?: string | null;
       client_tz_offset_minutes?: number | null;
