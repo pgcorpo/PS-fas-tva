@@ -25,13 +25,14 @@ export interface Habit {
 /**
  * Get the active habit version for a given week start.
  * Returns the version with the greatest effective_week_start <= week_start.
+ * If multiple versions have the same effective_week_start, returns the most recently created one.
  */
 export function getActiveVersion(
   habit: Habit,
   weekStart: DateString
 ): HabitVersion | null {
   const weekStartDate = parseISO(weekStart);
-  
+
   // Find the version with the greatest effective_week_start <= week_start
   const activeVersion = habit.versions
     .filter((v) => {
@@ -41,7 +42,15 @@ export function getActiveVersion(
     .sort((a, b) => {
       const dateA = parseISO(a.effective_week_start);
       const dateB = parseISO(b.effective_week_start);
-      return dateB.getTime() - dateA.getTime(); // Descending
+
+      // Primary sort: effective_week_start descending
+      const dateDiff = dateB.getTime() - dateA.getTime();
+      if (dateDiff !== 0) return dateDiff;
+
+      // Secondary sort: created_at descending (for same week edits)
+      const createdA = parseISO(a.created_at);
+      const createdB = parseISO(b.created_at);
+      return createdB.getTime() - createdA.getTime();
     })[0];
 
   return activeVersion || null;
