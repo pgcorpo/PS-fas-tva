@@ -77,9 +77,77 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* Main Content */}
-      <main>
+      <main className="pb-20 md:pb-0">
         {children}
       </main>
+
+      {/* Bottom Navigation - Mobile Only */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+        <div className="flex items-center justify-around h-16 px-2">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex flex-col items-center justify-center flex-1 gap-1 py-2"
+              >
+                {/* Icon */}
+                <div className={`transition-colors duration-200 ${
+                  isActive ? "text-pink-600" : "text-gray-500"
+                }`}>
+                  {item.href === "/daily" && (
+                    // Calendar with dot icon
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <line x1="3" y1="9" x2="21" y2="9" />
+                      <line x1="9" y1="4" x2="9" y2="9" />
+                      <line x1="15" y1="4" x2="15" y2="9" />
+                      <circle cx="12" cy="15" r="1.5" fill="currentColor" />
+                    </svg>
+                  )}
+                  {item.href === "/habits" && (
+                    // Stacked lines with checkmarks icon
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <line x1="6" y1="8" x2="10" y2="8" />
+                      <polyline points="11 8 12 9 14 7" strokeLinecap="round" strokeLinejoin="round" />
+                      <line x1="6" y1="12" x2="10" y2="12" />
+                      <polyline points="11 12 12 13 14 11" strokeLinecap="round" strokeLinejoin="round" />
+                      <line x1="6" y1="16" x2="10" y2="16" />
+                      <polyline points="11 16 12 17 14 15" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                  {item.href === "/goals" && (
+                    // Flag on mountain icon
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path d="M4 21 L4 10 L9 12 L9 19" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M9 12 L14 14 L19 10 L14 8 L9 10" strokeLinecap="round" strokeLinejoin="round" />
+                      <line x1="4" y1="21" x2="20" y2="21" strokeLinecap="round" />
+                    </svg>
+                  )}
+                  {item.href === "/progress" && (
+                    // Rising trend line icon
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <circle cx="5" cy="17" r="1.5" fill="currentColor" />
+                      <circle cx="10" cy="14" r="1.5" fill="currentColor" />
+                      <circle cx="15" cy="9" r="1.5" fill="currentColor" />
+                      <circle cx="20" cy="6" r="1.5" fill="currentColor" />
+                      <path d="M5 17 L10 14 L15 9 L20 6" strokeLinecap="round" />
+                    </svg>
+                  )}
+                </div>
+
+                {/* Label */}
+                <span className={`text-xs font-medium transition-colors duration-200 ${
+                  isActive ? "text-pink-600" : "text-gray-500"
+                }`}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }
