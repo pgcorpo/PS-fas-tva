@@ -78,40 +78,40 @@ export default function ProgressPage() {
     const weekStartStr = format(weekStart, "yyyy-MM-dd");
     const weekEndStr = format(weekEnd, "yyyy-MM-dd");
 
-    // Calculate required and completed for the week
+    // Calculate required and completed for the week (v2)
     let required = 0;
     let completed = 0;
 
     habits.forEach((habit) => {
-        const version = getActiveVersion(habit, weekStartStr);
-        if (version) {
-          const weekCompletions = completions.filter(
-            (c) =>
-              c.habit_id === habit.id &&
-              c.date >= weekStartStr &&
-              c.date <= weekEndStr
-          );
+      const version = getActiveVersion(habit, weekStartStr);
+      if (version) {
+        const weekCompletions = completions.filter(
+          (c) =>
+            c.habit_id === habit.id &&
+            c.date >= weekStartStr &&
+            c.date <= weekEndStr
+        );
 
-          let habitRequired = version.weekly_target;
-          let habitCompleted = weekCompletions.length;
+        let habitRequired = version.weekly_target;
+        let habitCompleted = weekCompletions.length;
 
-          // Fair Deletion Logic
-          if (habit.is_deleted) {
-            const deletionWeekStart = getWeekStart(habit.updated_at);
-            
-            if (weekStartStr > deletionWeekStart) {
-              // Future week: Exclude entirely
-              return;
-            } else if (weekStartStr === deletionWeekStart) {
-              // Deletion week: Cap target to current completions (fair score)
-              habitRequired = habitCompleted;
-            }
+        // Fair Deletion Logic
+        if (habit.is_deleted) {
+          const deletionWeekStart = getWeekStart(habit.updated_at);
+          
+          if (weekStartStr > deletionWeekStart) {
+            // Future week: Exclude entirely
+            return;
+          } else if (weekStartStr === deletionWeekStart) {
+            // Deletion week: Cap target to current completions (fair score)
+            habitRequired = habitCompleted;
           }
-
-          required += habitRequired;
-          completed += habitCompleted;
         }
-      });
+
+        required += habitRequired;
+        completed += habitCompleted;
+      }
+    });
 
     const percentage = required > 0 ? (completed / required) * 100 : 0;
 
