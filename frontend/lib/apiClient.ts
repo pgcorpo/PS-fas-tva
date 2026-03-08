@@ -52,7 +52,8 @@ async function fetchWithAuth<T>(
   options: RequestInit = {},
   token?: string
 ): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const sanitizedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE_URL}${sanitizedEndpoint}`;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
