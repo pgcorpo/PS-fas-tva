@@ -1,3 +1,9 @@
+[project]
+name = "habits-backend"
+version = "0.1.0"
+description = "Habits Tracker API"
+dependencies = []
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
