@@ -65,13 +65,21 @@ async function fetchWithAuth<T>(
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-    credentials: "include",
-  });
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      credentials: "include",
+    });
 
-  return handleResponse<T>(response);
+    return handleResponse<T>(response);
+  } catch (error) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      console.error(`Network error when calling: ${options.method || "GET"} ${url}`);
+      console.error("This usually means a CORS policy block or DNS failure.");
+    }
+    throw error;
+  }
 }
 
 // Token cache at module level

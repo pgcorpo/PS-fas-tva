@@ -28,12 +28,22 @@ class Settings(BaseSettings):
         cors_env = os.getenv("CORS_ORIGINS")
         if cors_env:
             import json
-            try:
-                # Try parsing as JSON array first
-                self.CORS_ORIGINS = json.loads(cors_env)
-            except json.JSONDecodeError:
-                # Fall back to comma-separated string
-                self.CORS_ORIGINS = [origin.strip() for origin in cors_env.split(",")]
+            # Clean up common wrapping: Remove leading/trailing [ ] and " ' if present
+            raw_orig = cors_env.strip()
+            if raw_orig.startswith("[") and raw_orig.endswith("]"):
+                try:
+                    self.CORS_ORIGINS = json.loads(raw_orig)
+                    return
+                except json.JSONDecodeError:
+                    # Strip the brackets for fallback parsing
+                    raw_orig = raw_orig[1:-1].strip()
+            
+            # Fallback: split by comma and clean each entry
+            self.CORS_ORIGINS = [
+                origin.strip().strip("'").strip('"').strip() 
+                for origin in raw_orig.split(",") 
+                if origin.strip()
+            ]
 
 
 settings = Settings()
