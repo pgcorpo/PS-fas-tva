@@ -15,18 +15,15 @@ from app.core.errors import (
     WeeklyTargetAlreadyMetError,
     TextRequiredError,
     InvalidDateError,
-    PastDateReadonlyError,
     CompletionNotFoundError,
-    CompletionNotTodayError,
 )
 from app.utils.validators import (
     validate_habit_exists_and_owned,
     validate_habit_active_for_week,
     validate_weekly_target_not_met,
-    validate_today_only,
     validate_text_required,
 )
-from app.utils.date_utils import get_week_range
+from app.utils.date_utils import get_week_range, get_client_today
 from app.services.habit_service import get_active_version
 
 router = APIRouter()
@@ -98,19 +95,20 @@ async def create_completion(
     current_user: User = Depends(get_current_user),
 ):
     """Create a completion instance (today only)"""
-    # Validate date is today
-    is_today = validate_today_only(
-        completion_data.date,
-        completion_data.client_timezone,
-        completion_data.client_tz_offset_minutes,
-    )
-    if not is_today:
-        raise PastDateReadonlyError("Completions can only be created for today")
-    
+    # Validate date is not in the future
     try:
         completion_date = date.fromisoformat(completion_data.date)
     except ValueError:
         raise InvalidDateError("Invalid date format")
+
+    # Get current date in client's timezone for future-date guard
+    client_today = get_client_today(
+        completion_data.client_timezone,
+        completion_data.client_tz_offset_minutes
+    )
+    
+    if completion_date > client_today:
+        raise InvalidDateError("Completions cannot be created for future dates")
     
     # Validate habit exists and is owned
     is_valid, habit = validate_habit_exists_and_owned(
@@ -175,15 +173,7 @@ async def delete_completion(
     if not completion:
         raise CompletionNotFoundError()
     
-    # Validate date is today
-    completion_date_str = completion.date.isoformat()
-    is_today = validate_today_only(
-        completion_date_str,
-        client_timezone,
-        client_tz_offset_minutes,
-    )
-    if not is_today:
-        raise CompletionNotTodayError()
+    # No restricted deletion window - users can delete any completion they own
     
     db.delete(completion)
     db.commit()

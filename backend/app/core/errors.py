@@ -36,9 +36,6 @@ class InvalidDateError(APIError):
         super().__init__("INVALID_DATE", message, status.HTTP_400_BAD_REQUEST)
 
 
-class PastDateReadonlyError(APIError):
-    def __init__(self, message: str = "Past dates are read-only"):
-        super().__init__("PAST_DATE_READONLY", message, status.HTTP_400_BAD_REQUEST)
 
 
 class HabitNotFoundError(APIError):
@@ -71,9 +68,6 @@ class CompletionNotFoundError(APIError):
         super().__init__("COMPLETION_NOT_FOUND", message, status.HTTP_404_NOT_FOUND)
 
 
-class CompletionNotTodayError(APIError):
-    def __init__(self, message: str = "Completions can only be deleted on the same day"):
-        super().__init__("COMPLETION_NOT_TODAY", message, status.HTTP_400_BAD_REQUEST)
 
 
 class GoalNotFoundError(APIError):

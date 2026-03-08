@@ -82,19 +82,34 @@ export default function ProgressPage() {
     let required = 0;
     let completed = 0;
 
-    habits
-      // Show all habits (including deleted) in progress calculations
       .forEach((habit) => {
         const version = getActiveVersion(habit, weekStartStr);
         if (version) {
-          required += version.weekly_target;
           const weekCompletions = completions.filter(
             (c) =>
               c.habit_id === habit.id &&
               c.date >= weekStartStr &&
               c.date <= weekEndStr
           );
-          completed += weekCompletions.length;
+
+          let habitRequired = version.weekly_target;
+          let habitCompleted = weekCompletions.length;
+
+          // Fair Deletion Logic
+          if (habit.is_deleted) {
+            const deletionWeekStart = getWeekStart(habit.updated_at);
+            
+            if (weekStartStr > deletionWeekStart) {
+              // Future week: Exclude entirely
+              return;
+            } else if (weekStartStr === deletionWeekStart) {
+              // Deletion week: Cap target to current completions (fair score)
+              habitRequired = habitCompleted;
+            }
+          }
+
+          required += habitRequired;
+          completed += habitCompleted;
         }
       });
 

@@ -44,7 +44,21 @@ export default function DailyPage() {
         (c) => c.habit_id === habit.id
       ).length;
 
-      const remaining = Math.max(0, version.weekly_target - completedCount);
+      let weeklyTarget = version.weekly_target;
+
+      // Fair Deletion Logic for score calculation
+      if (habit.is_deleted) {
+        const deletionWeekStart = getWeekStart(habit.updated_at);
+        if (weekRange.start > deletionWeekStart) {
+          // Future week: Should basically be hidden, but we return null to be safe
+          return null;
+        } else if (weekRange.start === deletionWeekStart) {
+          // Deletion week: Cap target to completions
+          weeklyTarget = completedCount;
+        }
+      }
+
+      const remaining = Math.max(0, weeklyTarget - completedCount);
 
       const completedForDate = completions.filter(
         (c) => c.habit_id === habit.id && c.date === selectedDate

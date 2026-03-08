@@ -29,7 +29,10 @@ def get_active_version(
             HabitVersion.habit_id == habit_id,
             HabitVersion.effective_week_start <= week_start,
         )
-        .order_by(desc(HabitVersion.effective_week_start))
+        .order_by(
+            desc(HabitVersion.effective_week_start),
+            desc(HabitVersion.created_at)
+        )
         .first()
     )
     

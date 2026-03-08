@@ -89,3 +89,29 @@ def validate_today(
         return False
     
     return claimed == client_today
+
+def get_client_today(
+    client_timezone: str | None = None,
+    client_tz_offset_minutes: int | None = None,
+) -> date:
+    """
+    Determine the client's actual "today" date based on their timezone.
+    Returns the local date for the client.
+    """
+    now_utc = datetime.utcnow()
+    
+    if client_timezone:
+        try:
+            tz = pytz.timezone(client_timezone)
+            now_client = now_utc.replace(tzinfo=pytz.UTC).astimezone(tz)
+            return now_client.date()
+        except pytz.exceptions.UnknownTimeZoneError:
+            pass
+            
+    if client_tz_offset_minutes is not None:
+        offset = timedelta(minutes=client_tz_offset_minutes)
+        now_client = now_utc + offset
+        return now_client.date()
+        
+    # Fallback to server time (UTC) if no timezone info provided
+    return now_utc.date()

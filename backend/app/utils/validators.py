@@ -75,18 +75,6 @@ def validate_weekly_target_not_met(
     return completed < version.weekly_target
 
 
-def validate_today_only(
-    claimed_date: str,
-    client_timezone: str | None = None,
-    client_tz_offset_minutes: int | None = None,
-) -> bool:
-    """
-    Validate that the claimed date is "today" for the client.
-    
-    Returns:
-        True if date is today, False otherwise
-    """
-    return validate_today(claimed_date, client_timezone, client_tz_offset_minutes)
 
 
 def validate_text_required(
