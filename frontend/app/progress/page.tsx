@@ -82,7 +82,7 @@ export default function ProgressPage() {
     let required = 0;
     let completed = 0;
 
-      .forEach((habit) => {
+    habits.forEach((habit) => {
         const version = getActiveVersion(habit, weekStartStr);
         if (version) {
           const weekCompletions = completions.filter(
