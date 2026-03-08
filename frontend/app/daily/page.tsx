@@ -8,6 +8,7 @@ import { useCreateCompletion, useDeleteCompletion } from "@/hooks/queries/useCom
 import {
   getLocalToday,
   getWeekRange,
+  getWeekStart,
   isTodayDate,
   isPastDate,
   formatDate,
