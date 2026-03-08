@@ -191,7 +191,7 @@ export default function ProgressPage() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-semibold text-gray-900 mb-2">how you&apos;re doing</h1>
-          <p className="text-lg text-gray-900">pick a week to see your daily breakdown</p>
+          <p className="text-lg text-gray-900">pick a week to see your daily breakdown <span className="text-xs text-gray-400 font-mono ml-2">Build: v1.0.5</span></p>
         </div>
 
         {/* Top Section: Enhanced Mini Calendar */}
