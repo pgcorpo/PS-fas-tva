@@ -55,7 +55,8 @@ coverage/
 *.tmp
 .cache/
 client_secret_*.json
-*.json
+# Broadly allow .json files again, only ignore secrets
+# *.json
 
 # Database backups (local copies only - scripts are safe to commit)
 backup.log
