@@ -78,11 +78,11 @@ export default function ProgressPage() {
     const weekStartStr = format(weekStart, "yyyy-MM-dd");
     const weekEndStr = format(weekEnd, "yyyy-MM-dd");
 
-    // Calculate required and completed for the week (v2)
+    // Calculate required and completed for the week (v3 - for...of)
     let required = 0;
     let completed = 0;
 
-    habits.forEach((habit) => {
+    for (const habit of habits) {
       const version = getActiveVersion(habit, weekStartStr);
       if (version) {
         const weekCompletions = completions.filter(
@@ -101,7 +101,7 @@ export default function ProgressPage() {
           
           if (weekStartStr > deletionWeekStart) {
             // Future week: Exclude entirely
-            return;
+            continue;
           } else if (weekStartStr === deletionWeekStart) {
             // Deletion week: Cap target to current completions (fair score)
             habitRequired = habitCompleted;
@@ -111,7 +111,7 @@ export default function ProgressPage() {
         required += habitRequired;
         completed += habitCompleted;
       }
-    });
+    }
 
     const percentage = required > 0 ? (completed / required) * 100 : 0;
 
