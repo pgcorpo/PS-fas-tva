@@ -67,16 +67,19 @@ export default function DailyPage() {
 
       // Determine how many instances to render
       let renderCount = 0;
-      if (remaining > 0 && completedForDate.length === 0) {
+      if (remaining > 0) {
         if (isToday) {
           const today = new Date(selectedDate);
           const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
           if (dayOfWeek === 0) {
-            // Sunday: render all remaining
+            // Sunday: render all remaining (catch-up day)
+            // remaining already subtracts any completions logged today
             renderCount = remaining;
           } else {
-            // Mon-Sat: render 1
-            renderCount = 1;
+            // Mon-Sat: render 1, but hide if already completed today
+            if (completedForDate.length === 0) {
+              renderCount = 1;
+            }
           }
         }
       }
