@@ -157,6 +157,16 @@ export default function ProgressPage() {
       const version = getActiveVersion(habit, selectedWeekStart);
       if (!version) return null;
 
+      let weeklyTarget = version.weekly_target;
+
+      // Fair Deletion Logic for rendering the row
+      if (habit.is_deleted) {
+        const deletionWeekStart = getWeekStart(habit.updated_at);
+        if (selectedWeekStart > deletionWeekStart) {
+          return null; // Don't render the row if this week is strictly after the deletion week
+        }
+      }
+
       const dailyStatus = weekDays.map(day => {
         const completion = completions.find(c =>
           c.habit_id === habit.id && c.date === day.date
@@ -169,7 +179,16 @@ export default function ProgressPage() {
       });
 
       const completedCount = dailyStatus.filter(d => d.isComplete).length;
-      const percentage = (completedCount / version.weekly_target) * 100;
+      
+      if (habit.is_deleted) {
+        const deletionWeekStart = getWeekStart(habit.updated_at);
+        if (selectedWeekStart === deletionWeekStart) {
+          // Deletion week: Cap target to completions
+          weeklyTarget = completedCount;
+        }
+      }
+
+      const percentage = weeklyTarget > 0 ? (completedCount / weeklyTarget) * 100 : 0;
 
       return {
         habit,
@@ -177,6 +196,7 @@ export default function ProgressPage() {
         dailyStatus,
         completedCount,
         percentage,
+        weeklyTarget,
         isExpanded: expandedHabitId === habit.id
       };
     })
@@ -340,7 +360,7 @@ export default function ProgressPage() {
                         <td className="text-center px-4 py-4">
                           <div className="flex flex-col items-center gap-1">
                             <span className="text-sm font-medium text-gray-900">
-                              {item.completedCount}/{item.version.weekly_target}
+                              {item.completedCount}/{item.weeklyTarget}
                             </span>
                             <span className={`text-xs px-2 py-0.5 rounded-full ${
                               item.percentage < 25
