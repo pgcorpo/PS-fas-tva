@@ -207,17 +207,16 @@ export default function ProgressPage() {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8">
           <h1 className="text-4xl font-semibold text-gray-900 mb-2">how you&apos;re doing</h1>
           <p className="text-lg text-gray-900">pick a week to see your daily breakdown <span className="text-xs text-gray-400 font-mono ml-2">Build: v1.0.5</span></p>
         </div>
 
-        {/* Top Section: Enhanced Mini Calendar */}
-        <div className="mb-8">
-          {/* Mini Calendar - Full Width */}
-          <div className="w-full max-w-2xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          {/* Left Column: Enhanced Mini Calendar */}
+          <div className="w-full lg:w-1/3 xl:w-1/4 flex-shrink-0">
             <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
               {/* Month Navigation */}
               <div className="flex items-center justify-between mb-4">
@@ -302,10 +301,9 @@ export default function ProgressPage() {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Weekly Grid Section */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          {/* Right Column: Weekly Grid Section */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex-1 w-full min-w-0">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
@@ -445,6 +443,7 @@ export default function ProgressPage() {
               </tbody>
             </table>
           </div>
+        </div>
         </div>
       </div>
     </Layout>
