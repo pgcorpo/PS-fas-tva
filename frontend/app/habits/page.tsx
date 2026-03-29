@@ -123,8 +123,8 @@ export default function HabitsPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-zinc-100 mb-3">your habits</h1>
-          <p className="text-lg text-zinc-400">the habits that&apos;ll actually change your life</p>
+          <h1 className="text-3xl font-semibold text-zinc-100 mb-3 tracking-tight">your habits</h1>
+          <p className="text-base md:text-lg text-zinc-400">the habits that&apos;ll actually change your life</p>
         </div>
 
         {/* Add Habit Button */}

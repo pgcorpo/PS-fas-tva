@@ -121,8 +121,8 @@ export default function GoalsPage() {
       <div className="max-w-5xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-zinc-100 mb-3">your goals</h1>
-          <p className="text-lg text-zinc-400">the big goals you&apos;re chasing this year</p>
+          <h1 className="text-3xl font-semibold text-zinc-100 mb-3 tracking-tight">your goals</h1>
+          <p className="text-base md:text-lg text-zinc-400">the big goals you&apos;re chasing this year</p>
         </div>
 
         {/* Add Goal Button */}

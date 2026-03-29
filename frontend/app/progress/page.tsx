@@ -210,8 +210,8 @@ export default function ProgressPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-semibold text-zinc-100 mb-2">how you&apos;re doing</h1>
-          <p className="text-lg text-zinc-400">pick a week to see your daily breakdown <span className="text-xs text-zinc-500 font-mono ml-2">Build: v1.0.5</span></p>
+          <h1 className="text-3xl font-semibold text-zinc-100 mb-2 tracking-tight">how you&apos;re doing</h1>
+          <p className="text-base md:text-lg text-zinc-400">pick a week to see your daily breakdown <span className="text-xs text-zinc-500 font-mono ml-2">Build: v1.0.5</span></p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -320,7 +320,7 @@ export default function ProgressPage() {
                         <div className={isToday ? "text-pink-400" : ""}>{day.dayName}</div>
                         <div className={`text-xs font-normal ${isToday ? "text-pink-400" : "text-zinc-400"}`}>
                           {day.dayOfMonth}
-                          {isToday && <span className="ml-1 inline-block w-1 h-1 bg-pink-400 rounded-full align-middle"></span>}
+                          {isToday && <span className="ml-0.5 inline-block w-1 h-1 bg-pink-400 rounded-full align-middle"></span>}
                         </div>
                       </th>
                     );

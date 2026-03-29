@@ -182,7 +182,7 @@ export default function DailyPage() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-zinc-100 mb-2">
+          <h1 className="text-3xl font-semibold text-zinc-100 mb-2 tracking-tight break-words">
             {formatDate(selectedDate, "EEEE, MMMM d")}
           </h1>
           {!isToday && (
@@ -323,7 +323,7 @@ export default function DailyPage() {
             />
 
             {/* Modal Content */}
-            <div className="relative bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 max-w-lg w-full p-8">
+            <div className="relative bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 max-w-lg w-full p-6 sm:p-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-semibold text-zinc-100">
                   add notes
