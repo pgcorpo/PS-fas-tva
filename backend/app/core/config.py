@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings
 from typing import List
 import os
 
+from pydantic import field_validator
 
 class Settings(BaseSettings):
     APP_ENV: str = "local"
@@ -18,32 +19,25 @@ class Settings(BaseSettings):
         "http://localhost:8000",
     ]
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # Allow CORS_ORIGINS to be set via environment variable (JSON array or comma-separated)
-        cors_env = os.getenv("CORS_ORIGINS")
-        if cors_env:
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v):
+        if isinstance(v, str):
             import json
-            # Clean up common wrapping: Remove leading/trailing [ ] and " ' if present
-            raw_orig = cors_env.strip()
+            raw_orig = v.strip()
             if raw_orig.startswith("[") and raw_orig.endswith("]"):
                 try:
-                    self.CORS_ORIGINS = json.loads(raw_orig)
-                    return
+                    return json.loads(raw_orig)
                 except json.JSONDecodeError:
-                    # Strip the brackets for fallback parsing
                     raw_orig = raw_orig[1:-1].strip()
-            
-            # Fallback: split by comma and clean each entry
-            self.CORS_ORIGINS = [
+            return [
                 origin.strip().strip("'").strip('"').strip() 
                 for origin in raw_orig.split(",") 
                 if origin.strip()
             ]
+        return v
 
-
+    class Config:
+        env_file = ".env"
+        case_sensitive = True
 settings = Settings()
