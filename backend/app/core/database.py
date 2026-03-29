@@ -1,13 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 from app.core.config import settings
 
 engine = create_engine(
     settings.DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=0,
-    max_overflow=5,
+    poolclass=NullPool,
     connect_args={"sslmode": "require"} if "neon.tech" in settings.DATABASE_URL else {},
     echo=settings.APP_ENV == "local",
 )
