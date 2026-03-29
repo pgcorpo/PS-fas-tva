@@ -122,7 +122,7 @@ export default function DailyPage() {
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="text-center">
             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-            <p className="mt-6 text-gray-900 font-medium">pulling up your day...</p>
+            <p className="mt-6 text-zinc-100 font-medium">pulling up your day...</p>
           </div>
         </div>
       </Layout>
@@ -134,11 +134,11 @@ export default function DailyPage() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-gray-900 mb-2">
+          <h1 className="text-4xl font-semibold text-zinc-100 mb-2">
             {formatDate(selectedDate, "EEEE, MMMM d")}
           </h1>
           {!isToday && (
-            <p className="text-base text-gray-600">view only (can&apos;t edit)</p>
+            <p className="text-base text-zinc-400">view only (can&apos;t edit)</p>
           )}
         </div>
 
@@ -147,20 +147,20 @@ export default function DailyPage() {
           <div className="mb-12">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-1.5 h-8 bg-gradient-to-b from-pink-500 to-rose-500 rounded-full"></div>
-              <h2 className="text-2xl font-semibold text-gray-900">
+              <h2 className="text-2xl font-semibold text-zinc-100">
                 on your plate today
               </h2>
             </div>
 
             {habitInstances.filter((item) => !item.habit.is_deleted && item.renderCount > 0).length === 0 ? (
-              <div className="text-center py-16 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="text-center py-16 bg-gradient-to-br from-green-950 to-emerald-950 rounded-2xl border border-green-800">
+                <div className="w-16 h-16 bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">you&apos;re done!</h3>
-                <p className="text-gray-900">week = complete. go touch grass</p>
+                <h3 className="text-xl font-semibold text-zinc-100 mb-2">you&apos;re done!</h3>
+                <p className="text-zinc-400">week = complete. go touch grass</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -189,7 +189,7 @@ export default function DailyPage() {
                             }
                           }}
                         />
-                        <label className="flex-1 text-base text-gray-900 font-medium cursor-pointer">
+                        <label className="flex-1 text-base text-zinc-100 font-medium cursor-pointer">
                           {item.habit.name}
                         </label>
                       </div>
@@ -204,14 +204,14 @@ export default function DailyPage() {
         <div>
           <div className="flex items-center gap-2 mb-6">
             <div className="w-1.5 h-8 bg-gradient-to-b from-green-500 to-emerald-500 rounded-full"></div>
-            <h2 className="text-2xl font-semibold text-gray-900">
+            <h2 className="text-2xl font-semibold text-zinc-100">
               already done
             </h2>
           </div>
 
           {habitInstances.filter((item) => item.completedForDate.length > 0).length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 rounded-2xl border border-gray-200">
-              <p className="text-gray-600">nothing done yet, time to start</p>
+            <div className="text-center py-12 bg-zinc-900 rounded-2xl border border-zinc-700">
+              <p className="text-zinc-400">nothing done yet, time to start</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -221,7 +221,7 @@ export default function DailyPage() {
                   item.completedForDate.map((completion) => (
                     <div
                       key={completion.id}
-                      className="flex items-center gap-4 p-5 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200 group"
+                      className="flex items-center gap-4 p-5 bg-gradient-to-r from-green-950 to-emerald-950 rounded-2xl border border-green-800 group"
                     >
                       <input
                         type="checkbox"
@@ -235,11 +235,11 @@ export default function DailyPage() {
                         }}
                       />
                       <div className="flex-1">
-                        <label className="text-base text-gray-900 font-medium">
+                        <label className="text-base text-zinc-100 font-medium">
                           {item.habit.name}
                         </label>
                         {completion.text && (
-                          <p className="text-sm text-gray-900 mt-1">
+                          <p className="text-sm text-zinc-400 mt-1">
                             {completion.text.substring(0, 100)}
                             {completion.text.length > 100 ? "..." : ""}
                           </p>
@@ -310,7 +310,7 @@ export default function DailyPage() {
                     setSelectedHabitForNotes(null);
                     setNotesText("");
                   }}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200"
+                  className="flex-1 px-6 py-3 border border-zinc-600 text-zinc-300 font-semibold rounded-xl hover:bg-zinc-800 transition-colors duration-200"
                 >
                   cancel
                 </button>

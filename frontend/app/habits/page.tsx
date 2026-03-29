@@ -111,7 +111,7 @@ export default function HabitsPage() {
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="text-center">
             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-            <p className="mt-6 text-gray-900 font-medium">loading...</p>
+            <p className="mt-6 text-zinc-100 font-medium">loading...</p>
           </div>
         </div>
       </Layout>
@@ -123,8 +123,8 @@ export default function HabitsPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-gray-900 mb-3">your habits</h1>
-          <p className="text-lg text-gray-900">the habits that&apos;ll actually change your life</p>
+          <h1 className="text-4xl font-semibold text-zinc-100 mb-3">your habits</h1>
+          <p className="text-lg text-zinc-400">the habits that&apos;ll actually change your life</p>
         </div>
 
         {/* Add Habit Button */}
@@ -136,9 +136,9 @@ export default function HabitsPage() {
         </button>
 
         {activeHabits.length === 0 ? (
-          <div className="text-center py-20 bg-gray-50 rounded-2xl border border-gray-200">
+          <div className="text-center py-20 bg-zinc-900 rounded-2xl border border-zinc-700">
             <div className="max-w-md mx-auto">
-              <div className="w-20 h-20 mx-auto mb-6 bg-pink-100 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 mx-auto mb-6 bg-pink-500/20 rounded-full flex items-center justify-center">
                 <svg
                   className="w-10 h-10 text-pink-500"
                   fill="none"
@@ -153,8 +153,8 @@ export default function HabitsPage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-3">no habits yet</h3>
-              <p className="text-gray-900 mb-8">add your first habit and start the grind</p>
+              <h3 className="text-2xl font-semibold text-zinc-100 mb-3">no habits yet</h3>
+              <p className="text-zinc-400 mb-8">add your first habit and start the grind</p>
               <button
                 onClick={() => handleOpenModal()}
                 className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg"
@@ -172,10 +172,10 @@ export default function HabitsPage() {
               return (
                 <div
                   key={habit.id}
-                  className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group"
+                  className="bg-zinc-900 rounded-2xl border border-zinc-700 shadow-sm hover:shadow-md hover:border-zinc-600 transition-all duration-200 overflow-hidden group"
                 >
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">{habit.name}</h3>
+                    <h3 className="text-xl font-semibold text-zinc-100 mb-4">{habit.name}</h3>
 
                     <div className="space-y-3 mb-6">
                       <div className="flex items-center gap-3">
@@ -243,16 +243,16 @@ export default function HabitsPage() {
                     </div>
                   </div>
 
-                  <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="px-6 py-4 bg-zinc-800 border-t border-zinc-700 flex gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
                     <button
                       onClick={() => handleOpenModal(habit)}
-                      className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-white rounded-xl transition-colors duration-200"
+                      className="flex-1 px-4 py-2.5 text-sm font-medium text-zinc-300 hover:bg-zinc-700 rounded-xl transition-colors duration-200"
                     >
                       edit
                     </button>
                     <button
                       onClick={() => handleDelete(habit.id)}
-                      className="flex-1 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-white rounded-xl transition-colors duration-200"
+                      className="flex-1 px-4 py-2.5 text-sm font-medium text-red-400 hover:bg-zinc-700 rounded-xl transition-colors duration-200"
                     >
                       delete
                     </button>
@@ -274,9 +274,9 @@ export default function HabitsPage() {
               />
 
               {/* Modal Content */}
-              <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
+              <div className="relative bg-zinc-900 rounded-2xl shadow-2xl max-w-lg w-full p-8">
                 <div className="flex items-center justify-between mb-8">
-                  <h2 className="text-3xl font-semibold text-gray-900">
+                  <h2 className="text-3xl font-semibold text-zinc-100">
                     {editingHabit ? "edit habit" : "new habit"}
                   </h2>
                   <button
@@ -292,7 +292,7 @@ export default function HabitsPage() {
                 <form onSubmit={handleSubmit}>
                   <div className="space-y-6">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label htmlFor="name" className="block text-sm font-semibold text-zinc-100 mb-2">
                         what&apos;s the habit?
                       </label>
                       <input
@@ -301,13 +301,13 @@ export default function HabitsPage() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
+                        className="w-full px-4 py-3.5 border border-zinc-600 bg-zinc-800 text-zinc-100 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base placeholder:text-zinc-500"
                         placeholder="run 3 miles, read before bed, drink more water..."
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="weekly_target" className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label htmlFor="weekly_target" className="block text-sm font-semibold text-zinc-100 mb-2">
                         how many times per week?
                       </label>
                       <input
@@ -318,20 +318,20 @@ export default function HabitsPage() {
                         max={7}
                         value={formData.weekly_target}
                         onChange={(e) => setFormData({ ...formData, weekly_target: parseInt(e.target.value) })}
-                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
+                        className="w-full px-4 py-3.5 border border-zinc-600 bg-zinc-800 text-zinc-100 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
                       />
-                      <p className="mt-2 text-sm text-gray-900">realistic number, be honest with yourself (1-7)</p>
+                      <p className="mt-2 text-sm text-zinc-400">realistic number, be honest with yourself (1-7)</p>
                     </div>
 
                     <div>
-                      <label htmlFor="linked_goal" className="block text-sm font-semibold text-gray-900 mb-2">
-                        connects to which goal? <span className="text-gray-700 font-normal">(optional)</span>
+                      <label htmlFor="linked_goal" className="block text-sm font-semibold text-zinc-100 mb-2">
+                        connects to which goal? <span className="text-zinc-400 font-normal">(optional)</span>
                       </label>
                       <select
                         id="linked_goal"
                         value={formData.linked_goal_id || ""}
                         onChange={(e) => setFormData({ ...formData, linked_goal_id: e.target.value || null })}
-                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
+                        className="w-full px-4 py-3.5 border border-zinc-600 bg-zinc-800 text-zinc-100 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
                       >
                         <option value="">none</option>
                         {activeGoals.map((goal) => (
@@ -343,28 +343,28 @@ export default function HabitsPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-2">
-                        tell us more <span className="text-gray-700 font-normal">(if you want)</span>
+                      <label htmlFor="description" className="block text-sm font-semibold text-zinc-100 mb-2">
+                        tell us more <span className="text-zinc-400 font-normal">(if you want)</span>
                       </label>
                       <textarea
                         id="description"
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none"
+                        className="w-full px-4 py-3.5 border border-zinc-600 bg-zinc-800 text-zinc-100 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none placeholder:text-zinc-500"
                         rows={3}
                         placeholder="any extra context about this habit..."
                       />
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-start gap-3 p-4 bg-zinc-800 rounded-xl">
                       <input
                         type="checkbox"
                         id="requires_text"
                         checked={formData.requires_text_on_completion}
                         onChange={(e) => setFormData({ ...formData, requires_text_on_completion: e.target.checked })}
-                        className="mt-0.5 h-5 w-5 text-pink-500 focus:ring-pink-500 border-gray-300 rounded"
+                        className="mt-0.5 h-5 w-5 text-pink-500 focus:ring-pink-500 border-zinc-600 rounded"
                       />
-                      <label htmlFor="requires_text" className="text-sm text-gray-900 leading-relaxed">
+                      <label htmlFor="requires_text" className="text-sm text-zinc-100 leading-relaxed">
                         make me write notes when i do this
                       </label>
                     </div>
@@ -372,8 +372,8 @@ export default function HabitsPage() {
 
                   {/* Error Message */}
                   {error && (
-                    <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-                      <p className="text-sm text-red-600">{error}</p>
+                    <div className="mt-6 p-4 bg-red-950 border border-red-800 rounded-xl">
+                      <p className="text-sm text-red-300">{error}</p>
                     </div>
                   )}
 
@@ -381,7 +381,7 @@ export default function HabitsPage() {
                     <button
                       type="button"
                       onClick={handleCloseModal}
-                      className="flex-1 px-6 py-4 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200"
+                      className="flex-1 px-6 py-4 border border-zinc-600 text-zinc-300 font-semibold rounded-xl hover:bg-zinc-800 transition-colors duration-200"
                     >
                       nevermind
                     </button>

@@ -17,8 +17,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+    <div className="min-h-screen bg-zinc-950">
+      <nav className="bg-zinc-900/90 border-b border-zinc-700 sticky top-0 z-40 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between h-20">
             <div className="flex items-center gap-12">
@@ -29,7 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                   </svg>
                 </div>
-                <span className="text-xl font-semibold text-gray-900">habits</span>
+                <span className="text-xl font-semibold text-zinc-100">habits</span>
               </Link>
 
               {/* Navigation */}
@@ -42,8 +42,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       href={item.href}
                       className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                         isActive
-                          ? "bg-pink-50 text-pink-600"
-                          : "text-gray-700 hover:bg-gray-100"
+                          ? "bg-pink-500/20 text-pink-400"
+                          : "text-zinc-300 hover:bg-zinc-800"
                       }`}
                     >
                       {item.label}
@@ -57,7 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-4">
               {session?.user && (
                 <>
-                  <span className="hidden sm:block text-sm text-gray-600">
+                  <span className="hidden sm:block text-sm text-zinc-400">
                     {session.user.email}
                   </span>
                   <button
@@ -65,7 +65,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       clearTokenCache();
                       signOut({ callbackUrl: "/" });
                     }}
-                    className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors duration-200"
+                    className="px-5 py-2.5 text-sm font-medium text-zinc-300 hover:bg-zinc-800 rounded-xl transition-colors duration-200"
                   >
                     peace out
                   </button>
@@ -82,7 +82,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Bottom Navigation - Mobile Only */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-700 z-50">
         <div className="flex items-center justify-around h-16 px-2">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -94,10 +94,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               >
                 {/* Icon */}
                 <div className={`transition-colors duration-200 ${
-                  isActive ? "text-pink-600" : "text-gray-500"
+                  isActive ? "text-pink-400" : "text-zinc-500"
                 }`}>
                   {item.href === "/daily" && (
-                    // Calendar with dot icon
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <rect x="3" y="4" width="18" height="18" rx="2" />
                       <line x1="3" y1="9" x2="21" y2="9" />
@@ -107,7 +106,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </svg>
                   )}
                   {item.href === "/habits" && (
-                    // Stacked lines with checkmarks icon
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <line x1="6" y1="8" x2="10" y2="8" />
                       <polyline points="11 8 12 9 14 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -118,7 +116,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </svg>
                   )}
                   {item.href === "/goals" && (
-                    // Flag on mountain icon
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path d="M4 21 L4 10 L9 12 L9 19" strokeLinecap="round" strokeLinejoin="round" />
                       <path d="M9 12 L14 14 L19 10 L14 8 L9 10" strokeLinecap="round" strokeLinejoin="round" />
@@ -126,7 +123,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </svg>
                   )}
                   {item.href === "/progress" && (
-                    // Rising trend line icon
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <circle cx="5" cy="17" r="1.5" fill="currentColor" />
                       <circle cx="10" cy="14" r="1.5" fill="currentColor" />
@@ -139,7 +135,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
                 {/* Label */}
                 <span className={`text-xs font-medium transition-colors duration-200 ${
-                  isActive ? "text-pink-600" : "text-gray-500"
+                  isActive ? "text-pink-400" : "text-zinc-500"
                 }`}>
                   {item.label}
                 </span>

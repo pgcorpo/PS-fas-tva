@@ -107,7 +107,7 @@ export default function GoalsPage() {
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="text-center">
             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-pink-500 border-r-transparent"></div>
-            <p className="mt-6 text-gray-900 font-medium">loading...</p>
+            <p className="mt-6 text-zinc-100 font-medium">loading...</p>
           </div>
         </div>
       </Layout>
@@ -119,8 +119,8 @@ export default function GoalsPage() {
       <div className="max-w-5xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-semibold text-gray-900 mb-3">your goals</h1>
-          <p className="text-lg text-gray-900">the big goals you&apos;re chasing this year</p>
+          <h1 className="text-4xl font-semibold text-zinc-100 mb-3">your goals</h1>
+          <p className="text-lg text-zinc-400">the big goals you&apos;re chasing this year</p>
         </div>
 
         {/* Add Goal Button */}
@@ -132,9 +132,9 @@ export default function GoalsPage() {
         </button>
 
         {activeGoals.length === 0 ? (
-          <div className="text-center py-20 bg-gray-50 rounded-2xl border border-gray-200">
+          <div className="text-center py-20 bg-zinc-900 rounded-2xl border border-zinc-700">
             <div className="max-w-md mx-auto">
-              <div className="w-20 h-20 mx-auto mb-6 bg-pink-100 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 mx-auto mb-6 bg-pink-500/20 rounded-full flex items-center justify-center">
                 <svg
                   className="w-10 h-10 text-pink-500"
                   fill="none"
@@ -149,8 +149,8 @@ export default function GoalsPage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-3">no goals yet</h3>
-              <p className="text-gray-900 mb-8">what&apos;s the first big thing you&apos;re going after?</p>
+              <h3 className="text-2xl font-semibold text-zinc-100 mb-3">no goals yet</h3>
+              <p className="text-zinc-400 mb-8">what&apos;s the first big thing you&apos;re going after?</p>
               <button
                 onClick={() => handleOpenModal()}
                 className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-200 shadow-md hover:shadow-lg"
@@ -164,30 +164,30 @@ export default function GoalsPage() {
             {activeGoals.map((goal) => (
               <div
                 key={goal.id}
-                className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 group"
+                className="bg-zinc-900 p-8 rounded-2xl border border-zinc-700 shadow-sm hover:shadow-md hover:border-zinc-600 transition-all duration-200 group"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-4 mb-3">
-                      <h3 className="text-2xl font-semibold text-gray-900">{goal.title}</h3>
-                      <span className="px-4 py-1.5 text-sm font-semibold bg-pink-50 text-pink-600 rounded-full">
+                      <h3 className="text-2xl font-semibold text-zinc-100">{goal.title}</h3>
+                      <span className="px-4 py-1.5 text-sm font-semibold bg-pink-500/20 text-pink-400 rounded-full">
                         {goal.year}
                       </span>
                     </div>
                     {goal.description && (
-                      <p className="text-gray-900 leading-relaxed">{goal.description}</p>
+                      <p className="text-zinc-400 leading-relaxed">{goal.description}</p>
                     )}
                   </div>
                   <div className="flex gap-3 ml-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <button
                       onClick={() => handleOpenModal(goal)}
-                      className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors duration-200"
+                      className="px-5 py-2.5 text-sm font-medium text-zinc-300 hover:bg-zinc-800 rounded-xl transition-colors duration-200"
                     >
                       edit
                     </button>
                     <button
                       onClick={() => handleDelete(goal.id)}
-                      className="px-5 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-200"
+                      className="px-5 py-2.5 text-sm font-medium text-red-400 hover:bg-zinc-800 rounded-xl transition-colors duration-200"
                     >
                       delete
                     </button>
@@ -209,9 +209,9 @@ export default function GoalsPage() {
               />
 
               {/* Modal Content */}
-              <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
+              <div className="relative bg-zinc-900 rounded-2xl shadow-2xl max-w-lg w-full p-8">
                 <div className="flex items-center justify-between mb-8">
-                  <h2 className="text-3xl font-semibold text-gray-900">
+                  <h2 className="text-3xl font-semibold text-zinc-100">
                     {editingGoal ? "edit goal" : "new goal"}
                   </h2>
                   <button
@@ -227,7 +227,7 @@ export default function GoalsPage() {
                 <form onSubmit={handleSubmit}>
                   <div className="space-y-6">
                     <div>
-                      <label htmlFor="title" className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label htmlFor="title" className="block text-sm font-semibold text-zinc-100 mb-2">
                         what&apos;s the goal?
                       </label>
                       <input
@@ -236,13 +236,13 @@ export default function GoalsPage() {
                         required
                         value={formData.title}
                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
+                        className="w-full px-4 py-3.5 border border-zinc-600 bg-zinc-800 text-zinc-100 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base placeholder:text-zinc-500"
                         placeholder="run a marathon, get fluent in spanish, read 50 books..."
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="year" className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label htmlFor="year" className="block text-sm font-semibold text-zinc-100 mb-2">
                         which year?
                       </label>
                       <input
@@ -251,21 +251,21 @@ export default function GoalsPage() {
                         required
                         value={formData.year}
                         onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
-                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
+                        className="w-full px-4 py-3.5 border border-zinc-600 bg-zinc-800 text-zinc-100 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base"
                         min={2020}
                         max={2100}
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="description" className="block text-sm font-semibold text-gray-900 mb-2">
-                        tell us more <span className="text-gray-700 font-normal">(if you want)</span>
+                      <label htmlFor="description" className="block text-sm font-semibold text-zinc-100 mb-2">
+                        tell us more <span className="text-zinc-400 font-normal">(if you want)</span>
                       </label>
                       <textarea
                         id="description"
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none"
+                        className="w-full px-4 py-3.5 border border-zinc-600 bg-zinc-800 text-zinc-100 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none placeholder:text-zinc-500"
                         rows={4}
                         placeholder="what does success look like for this?"
                       />
@@ -274,8 +274,8 @@ export default function GoalsPage() {
 
                   {/* Error Message */}
                   {error && (
-                    <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-                      <p className="text-sm text-red-600">{error}</p>
+                    <div className="mt-6 p-4 bg-red-950 border border-red-800 rounded-xl">
+                      <p className="text-sm text-red-300">{error}</p>
                     </div>
                   )}
 
@@ -283,7 +283,7 @@ export default function GoalsPage() {
                     <button
                       type="button"
                       onClick={handleCloseModal}
-                      className="flex-1 px-6 py-4 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200"
+                      className="flex-1 px-6 py-4 border border-zinc-600 text-zinc-300 font-semibold rounded-xl hover:bg-zinc-800 transition-colors duration-200"
                     >
                       nevermind
                     </button>
