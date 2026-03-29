@@ -40,9 +40,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                      className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 relative ${
                         isActive
-                          ? "bg-pink-500/20 text-pink-400"
+                          ? "bg-pink-500/20 text-pink-400 after:absolute after:bottom-0 after:left-2 after:right-2 after:h-0.5 after:bg-pink-400 after:rounded-full"
                           : "text-zinc-300 hover:bg-zinc-800"
                       }`}
                     >
@@ -77,7 +77,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* Main Content */}
-      <main className="pb-20 md:pb-0">
+      <main className="pb-20 md:pb-0 page-fade">
         {children}
       </main>
 

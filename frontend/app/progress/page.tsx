@@ -285,7 +285,7 @@ export default function ProgressPage() {
                     {week.required > 0 && (
                       <div className="w-full bg-zinc-700 rounded-full h-1.5 mt-2">
                         <div
-                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                          className={`h-1.5 rounded-full bar-grow ${
                             week.percentage < 25
                               ? "bg-gradient-to-r from-red-500 to-rose-500"
                               : week.percentage <= 75
@@ -309,24 +309,38 @@ export default function ProgressPage() {
               <thead className="bg-zinc-800 border-b border-zinc-700">
                 <tr>
                   <th className="text-left px-6 py-4 text-sm font-semibold text-zinc-100">
-                    Habit
+                    habit
                   </th>
-                  {weekDays.map(day => (
-                    <th key={day.date} className="text-center px-3 py-4 text-sm font-semibold text-zinc-100">
-                      <div>{day.dayName}</div>
-                      <div className="text-xs text-zinc-400 font-normal">{day.dayOfMonth}</div>
-                    </th>
-                  ))}
+                  {weekDays.map(day => {
+                    const isToday = day.date === format(new Date(), "yyyy-MM-dd");
+                    return (
+                      <th key={day.date} className={`text-center px-3 py-4 text-sm font-semibold text-zinc-100 ${
+                        isToday ? "bg-pink-500/10" : ""
+                      }`}>
+                        <div className={isToday ? "text-pink-400" : ""}>{day.dayName}</div>
+                        <div className={`text-xs font-normal ${isToday ? "text-pink-400" : "text-zinc-400"}`}>
+                          {day.dayOfMonth}
+                          {isToday && <span className="ml-1 inline-block w-1 h-1 bg-pink-400 rounded-full align-middle"></span>}
+                        </div>
+                      </th>
+                    );
+                  })}
                   <th className="text-center px-4 py-4 text-sm font-semibold text-zinc-100">
-                    Total
+                    total
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-700">
                 {habitGridData.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="px-6 py-12 text-center">
-                      <p className="text-gray-600">no habits yet</p>
+                    <td colSpan={9} className="px-6 py-16 text-center">
+                      <div className="w-12 h-12 mx-auto mb-4 bg-zinc-800 rounded-full flex items-center justify-center">
+                        <svg className="w-6 h-6 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                      </div>
+                      <p className="text-zinc-400 font-medium">no habits yet</p>
+                      <p className="text-zinc-500 text-sm mt-1">add habits to start tracking your progress</p>
                     </td>
                   </tr>
                 ) : (

@@ -55,3 +55,62 @@ export function getActiveVersion(
 
   return activeVersion || null;
 }
+
+/**
+ * Compute the current consecutive-week streak for a habit.
+ * Walks backwards from the most recent completed week and counts consecutive
+ * weeks where completions >= weeklyTarget.
+ *
+ * @param completions  All completion records for this habit (any date range).
+ * @param weeklyTarget The target number of completions per week.
+ * @param today        Optional override for "today" (for testing).
+ */
+export function computeStreak(
+  completions: Array<{ date: string }>,
+  weeklyTarget: number,
+  today: Date = new Date()
+): number {
+  if (weeklyTarget === 0 || completions.length === 0) return 0;
+
+  // Build a Set of completed dates for quick lookup
+  const completedDates = new Set(completions.map((c) => c.date));
+
+  let streak = 0;
+  // Start from the week containing today and walk backwards up to 52 weeks
+  const todayMs = today.getTime();
+
+  for (let weeksBack = 0; weeksBack < 52; weeksBack++) {
+    // Monday of this week
+    const pivot = new Date(todayMs - weeksBack * 7 * 24 * 60 * 60 * 1000);
+    const dayOfWeek = pivot.getDay(); // 0=Sun
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const monday = new Date(pivot);
+    monday.setDate(pivot.getDate() + mondayOffset);
+    monday.setHours(0, 0, 0, 0);
+
+    // If the week hasn't ended yet (current week), only count if target already met
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    sunday.setHours(23, 59, 59, 999);
+
+    // Count completions in this week
+    let count = 0;
+    for (let d = 0; d < 7; d++) {
+      const day = new Date(monday);
+      day.setDate(monday.getDate() + d);
+      const dateStr = day.toISOString().split("T")[0];
+      if (completedDates.has(dateStr)) count++;
+    }
+
+    if (count >= weeklyTarget) {
+      streak++;
+    } else if (weeksBack === 0) {
+      // Current week not yet complete — don't break streak, just skip
+      continue;
+    } else {
+      break;
+    }
+  }
+
+  return streak;
+}

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,7 +13,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 /* Prevent Chromium/Safari from injecting white backgrounds on autofill */
@@ -21,6 +23,25 @@ select:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 1000px #27272a inset !important;
   -webkit-text-fill-color: #f4f4f5 !important;
   caret-color: #f4f4f5;
+}
+
+/* Page fade-in on navigation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-fade {
+  animation: fadeIn 150ms ease-out both;
+}
+
+/* Progress bar mount animation */
+@keyframes growWidth {
+  from { width: 0%; }
+}
+
+.bar-grow {
+  animation: growWidth 500ms ease-out both;
 }
 
 @layer utilities {

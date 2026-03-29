@@ -15,6 +15,54 @@ import {
 } from "@/lib/dateUtils";
 import { getActiveVersion } from "@/lib/habitUtils";
 
+// Sub-component: expandable completion note
+function CompletionRow({
+  habitName,
+  noteText,
+  isPast,
+  onUncomplete,
+}: {
+  habitName: string;
+  noteText: string | null;
+  isPast: boolean;
+  onUncomplete: () => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = (noteText?.length ?? 0) > 100;
+  return (
+    <div className="flex items-start gap-4 p-5 bg-gradient-to-r from-green-950 to-emerald-950 rounded-2xl border border-green-800 group">
+      <input
+        type="checkbox"
+        checked
+        disabled={isPast}
+        className="mt-0.5 w-6 h-6 accent-pink-500 border-2 border-green-400 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+        onChange={onUncomplete}
+      />
+      <div className="flex-1 min-w-0">
+        <label className="text-base text-zinc-100 font-medium">{habitName}</label>
+        {noteText && (
+          <div className="mt-1">
+            <p className="text-sm text-zinc-400">
+              {expanded || !isLong ? noteText : `${noteText.substring(0, 100)}...`}
+            </p>
+            {isLong && (
+              <button
+                onClick={() => setExpanded((e) => !e)}
+                className="text-xs text-pink-400 hover:text-pink-300 mt-1 transition-colors"
+              >
+                {expanded ? "read less" : "read more"}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+      <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+  );
+}
+
 export default function DailyPage() {
   const [selectedDate, setSelectedDate] = useState(getLocalToday());
   const isToday = isTodayDate(selectedDate);
@@ -140,6 +188,31 @@ export default function DailyPage() {
           {!isToday && (
             <p className="text-base text-zinc-400">view only (can&apos;t edit)</p>
           )}
+          {/* Week progress stat */}
+          {(() => {
+            const weekTotal = habitInstances.reduce((sum, item) => sum + (item.version?.weekly_target ?? 0), 0);
+            const weekDone = habitInstances.reduce((sum, item) => sum + item.completedForDate.length, 0);
+            const weekAllDone = completions.filter(c => {
+              const habit = habitInstances.find(h => h.habit.id === c.habit_id);
+              return !!habit;
+            }).length;
+            const weekRequired = habitInstances.reduce((sum, item) => sum + (item.version?.weekly_target ?? 0), 0);
+            const weekCompleted = completions.length;
+            const pct = weekRequired > 0 ? Math.round((weekCompleted / weekRequired) * 100) : 0;
+            if (weekRequired === 0) return null;
+            return (
+              <div className="flex items-center gap-2 mt-3">
+                <span className="text-sm text-zinc-400">
+                  {Math.min(weekCompleted, weekRequired)} of {weekRequired} done this week
+                </span>
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                  pct < 25 ? "bg-red-950 text-red-300" :
+                  pct <= 75 ? "bg-amber-950 text-amber-300" :
+                  "bg-green-950 text-green-300"
+                }`}>{pct}%</span>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Remaining Section */}
@@ -170,11 +243,11 @@ export default function DailyPage() {
                     Array.from({ length: item.renderCount }, (_, i) => (
                       <div
                         key={`${item.habit.id}-${i}`}
-                        className="flex items-center gap-4 p-5 bg-white rounded-2xl border border-gray-200 hover:border-pink-200 hover:shadow-sm transition-all duration-200 group"
+                        className="flex items-center gap-4 p-5 bg-zinc-900 rounded-2xl border border-zinc-700 hover:border-pink-500/50 hover:bg-zinc-800 transition-all duration-200 group"
                       >
                         <input
                           type="checkbox"
-                          className="w-6 h-6 text-pink-500 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:ring-offset-0 cursor-pointer transition-all"
+                          className="w-6 h-6 accent-pink-500 border-2 border-zinc-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:ring-offset-0 cursor-pointer transition-all"
                           onChange={() => {
                             if (item.version.requires_text_on_completion) {
                               // Open notes modal
@@ -219,36 +292,15 @@ export default function DailyPage() {
                 .filter((item) => item.completedForDate.length > 0)
                 .flatMap((item) =>
                   item.completedForDate.map((completion) => (
-                    <div
+                    <CompletionRow
                       key={completion.id}
-                      className="flex items-center gap-4 p-5 bg-gradient-to-r from-green-950 to-emerald-950 rounded-2xl border border-green-800 group"
-                    >
-                      <input
-                        type="checkbox"
-                        checked
-                        disabled={isPast}
-                        className="w-6 h-6 text-green-500 border-2 border-green-400 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                        onChange={() => {
-                          if (!isPast) {
-                            handleUncomplete(completion.id);
-                          }
-                        }}
-                      />
-                      <div className="flex-1">
-                        <label className="text-base text-zinc-100 font-medium">
-                          {item.habit.name}
-                        </label>
-                        {completion.text && (
-                          <p className="text-sm text-zinc-400 mt-1">
-                            {completion.text.substring(0, 100)}
-                            {completion.text.length > 100 ? "..." : ""}
-                          </p>
-                        )}
-                      </div>
-                      <svg className="w-6 h-6 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
+                      habitName={item.habit.name}
+                      noteText={completion.text}
+                      isPast={isPast}
+                      onUncomplete={() => {
+                        if (!isPast) handleUncomplete(completion.id);
+                      }}
+                    />
                   ))
                 )}
             </div>
@@ -271,9 +323,9 @@ export default function DailyPage() {
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
+            <div className="relative bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-700 max-w-lg w-full p-8">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">
+                <h2 className="text-2xl font-semibold text-zinc-100">
                   add notes
                 </h2>
                 <button
@@ -282,22 +334,22 @@ export default function DailyPage() {
                     setSelectedHabitForNotes(null);
                     setNotesText("");
                   }}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 hover:bg-zinc-800 rounded-full transition-colors"
                 >
-                  <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-6 h-6 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
 
-              <p className="text-sm text-gray-900 mb-4">
+              <p className="text-sm text-zinc-300 mb-4">
                 {selectedHabitForNotes.habitName}
               </p>
 
               <textarea
                 value={notesText}
                 onChange={(e) => setNotesText(e.target.value)}
-                className="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none"
+                className="w-full px-4 py-3.5 bg-zinc-800 border border-zinc-600 text-zinc-100 placeholder-zinc-500 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all text-base resize-none"
                 rows={6}
                 placeholder="what did you do? how'd it go?"
                 autoFocus

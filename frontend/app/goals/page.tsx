@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { useGoals, useCreateGoal, useUpdateGoal, useDeleteGoal } from "@/hooks/queries/useGoals";
+import { useHabits } from "@/hooks/queries/useHabits";
 
 interface GoalFormData {
   title: string;
@@ -12,6 +13,7 @@ interface GoalFormData {
 
 export default function GoalsPage() {
   const { data: goals = [], isLoading } = useGoals();
+  const { data: habits = [] } = useHabits();
   const createGoal = useCreateGoal();
   const updateGoal = useUpdateGoal();
   const deleteGoal = useDeleteGoal();
@@ -173,6 +175,16 @@ export default function GoalsPage() {
                       <span className="px-4 py-1.5 text-sm font-semibold bg-pink-500/20 text-pink-400 rounded-full">
                         {goal.year}
                       </span>
+                      {(() => {
+                        const linkedCount = habits.filter(
+                          (h) => !h.is_deleted && h.versions[0]?.linked_goal_id === goal.id
+                        ).length;
+                        return linkedCount > 0 ? (
+                          <span className="px-3 py-1 text-xs font-medium bg-zinc-700 text-zinc-300 rounded-full">
+                            {linkedCount} {linkedCount === 1 ? 'habit' : 'habits'}
+                          </span>
+                        ) : null;
+                      })()}
                     </div>
                     {goal.description && (
                       <p className="text-zinc-400 leading-relaxed">{goal.description}</p>

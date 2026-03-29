@@ -179,7 +179,7 @@ export default function HabitsPage() {
 
                     <div className="space-y-3 mb-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-pink-50 rounded-full flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 bg-pink-500/15 rounded-full flex items-center justify-center flex-shrink-0">
                           <svg
                             className="w-5 h-5 text-pink-500"
                             fill="none"
@@ -194,14 +194,14 @@ export default function HabitsPage() {
                             />
                           </svg>
                         </div>
-                        <span className="text-gray-700">
+                        <span className="text-zinc-300">
                           {latestVersion?.weekly_target || 0}× weekly
                         </span>
                       </div>
 
                       {latestVersion?.requires_text_on_completion && (
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-10 h-10 bg-purple-500/15 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg
                               className="w-5 h-5 text-purple-500"
                               fill="none"
@@ -216,13 +216,13 @@ export default function HabitsPage() {
                               />
                             </svg>
                           </div>
-                          <span className="text-gray-700">needs notes</span>
+                          <span className="text-zinc-300">needs notes</span>
                         </div>
                       )}
 
                       {linkedGoal && (
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-10 h-10 bg-green-500/15 rounded-full flex items-center justify-center flex-shrink-0">
                             <svg
                               className="w-5 h-5 text-green-500"
                               fill="none"
@@ -237,7 +237,7 @@ export default function HabitsPage() {
                               />
                             </svg>
                           </div>
-                          <span className="text-gray-700 truncate">{linkedGoal.title}</span>
+                          <span className="text-zinc-300 truncate">{linkedGoal.title}</span>
                         </div>
                       )}
                     </div>
