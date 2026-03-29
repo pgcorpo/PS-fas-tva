@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "info"
     RATE_LIMIT_ENABLED: bool = False
     MAX_REQUESTS_PER_MINUTE: int = 60
-    CORS_ORIGINS: List[str] = [
+    CORS_ORIGINS: str | List[str] = [
         "http://localhost:3000",
         "http://localhost:8000",
     ]
